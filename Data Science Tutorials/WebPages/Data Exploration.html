@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DataScope — Data Exploration & Visualization (Complete Guide)</title>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa7bd; --accent:#60a5fa; --glass: rgba(255,255,255,0.03);
+      --maxw:1100px; --radius:12px; --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+    html,body{height:100%; margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:linear-gradient(180deg,#081225 0%, #071425 100%); color:#e6eef8;}
+    .container{max-width:var(--maxw); margin:28px auto; padding:24px;}
+    header{display:flex; align-items:center; gap:16px; margin-bottom:18px;}
+    header .logo{width:64px; height:64px; border-radius:12px; background:linear-gradient(135deg,var(--accent), #7dd3fc); display:flex; align-items:center; justify-content:center; color:#022; font-weight:700; font-size:20px;}
+    h1{margin:0; font-size:20px;}
+    .subtitle{color:var(--muted); font-size:13px; margin-top:6px;}
+    .grid{display:grid; grid-template-columns: 320px 1fr; gap:20px; align-items:start;}
+    nav.card{background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:0 6px 30px rgba(2,6,23,0.6);}
+    nav h3{margin-top:0; margin-bottom:6px;}
+    nav ul{list-style:none; padding:0; margin:0;}
+    nav li{padding:8px 0; color:var(--muted); font-size:14px; border-bottom:1px dashed rgba(255,255,255,0.02);}
+    nav li:last-child{border-bottom:none;}
+    main .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:20px; box-shadow:0 6px 30px rgba(2,6,23,0.6); margin-bottom:18px;}
+    .section-title{display:flex; justify-content:space-between; align-items:center;}
+    .pill{background:var(--glass); padding:6px 10px; border-radius:999px; color:var(--muted); font-size:12px;}
+    .muted{color:var(--muted); font-size:13px;}
+    code, pre{font-family:var(--mono); background:rgba(0,0,0,0.35); padding:6px; border-radius:8px; color:#e6eef8;}
+    pre{overflow:auto; padding:12px; font-size:13px;}
+    table{width:100%; border-collapse:collapse; margin-top:12px;}
+    th,td{padding:8px 10px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.03); font-size:13px;}
+    .badge{display:inline-block; padding:6px 8px; border-radius:8px; background:rgba(96,165,250,0.12); color:var(--accent); font-weight:600; font-size:12px;}
+    .controls{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;}
+    button.btn{background:transparent; border:1px solid rgba(255,255,255,0.05); padding:8px 10px; border-radius:8px; color:var(--muted); cursor:pointer;}
+    .example-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:12px;}
+    .chart-card{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); padding:12px; border-radius:10px; min-height:220px; display:flex; flex-direction:column;}
+    footer{color:var(--muted); font-size:13px; margin-top:18px; text-align:center;}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr; } nav.card{order:2} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">DS</div>
+      <div>
+        <h1>DataScope — Data Exploration & Visualization (Complete Guide)</h1>
+        <div class="subtitle">Stage 2 — Understand your data deeply. Identify quality, patterns, and signal — then visualize it for action.</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT NAV -->
+      <nav class="card" aria-label="Table of contents">
+        <h3>Contents</h3>
+        <ul>
+          <li>Overview & Objectives</li>
+          <li>EDA Checklist & Roadmap</li>
+          <li>Data Profiling & Metadata</li>
+          <li>Missing Data & Duplicates</li>
+          <li>Univariate Analysis</li>
+          <li>Bivariate & Multivariate</li>
+          <li>Time Series Analysis</li>
+          <li>Text EDA</li>
+          <li>Feature Engineering Tips</li>
+          <li>Dimensionality Reduction & Clustering</li>
+          <li>Interactive Examples</li>
+          <li>Code Snippets</li>
+          <li>Ethics & Reporting</li>
+        </ul>
+      </nav>
+
+      <!-- MAIN -->
+      <main>
+        <!-- Overview -->
+        <section class="card" id="overview">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Overview & Objectives</h2>
+              <div class="muted">What you will learn in this stage</div>
+            </div>
+            <div class="pill">Stage 2</div>
+          </div>
+
+          <p style="margin-top:12px;">
+            Data Exploration (EDA) is the methodical process of examining raw data to discover structure, spot anomalies,
+            test assumptions and check relationships between variables. The output of EDA is a prioritized list of findings,
+            a data quality report, candidate features and visualizations to communicate insights.
+          </p>
+
+          <ul style="margin-top:12px; color:var(--muted)">
+            <li>Identify data issues and correct them early</li>
+            <li>Discover relationships and patterns to guide modeling</li>
+            <li>Create visual artifacts that explain results to stakeholders</li>
+          </ul>
+        </section>
+
+        <!-- Checklist -->
+        <section class="card" id="checklist">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">EDA Checklist & Roadmap</h2>
+              <div class="muted">A step-by-step guide to a complete exploration</div>
+            </div>
+            <div class="badge">Checklist</div>
+          </div>
+
+          <ol style="margin-top:12px; color:var(--muted)">
+            <li>Load data & review schema (types, columns, sample rows)</li>
+            <li>Run automatic profiling (if available) to get baseline statistics</li>
+            <li>Assess missing values & duplicates</li>
+            <li>Check ranges, cardinality, and unique values</li>
+            <li>Plot distributions for all numeric features</li>
+            <li>Plot categorical frequencies and top categories</li>
+            <li>Examine correlations & scatterplots for pairwise relationships</li>
+            <li>Perform time series checks for temporal data</li>
+            <li>Identify and treat outliers using domain rules & robust stats</li>
+            <li>Document feature engineering ideas & candidate predictors</li>
+            <li>Generate visuals for stakeholders and capture reproducible code</li>
+          </ol>
+        </section>
+
+        <!-- Data Profile -->
+        <section class="card" id="profiling">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Data Profiling & Metadata</h2>
+              <div class="muted">Why profiling matters and a sample profile</div>
+            </div>
+            <div class="pill">Profiling</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px;">
+            A data profile summarizes each column's core metrics: type, sample values, null percentage, unique count,
+            min/max and a few summary statistics. Use it to prioritize cleaning effort.
+          </p>
+
+          <!-- sample table -->
+          <table aria-describedby="profile-desc">
+            <thead>
+              <tr><th>Column</th><th>Type</th><th>Unique</th><th>Missing %</th><th>Sample</th><th>Min / Max</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>customer_id</td><td>string</td><td>24,000</td><td>0%</td><td>c_00123</td><td>—</td></tr>
+              <tr><td>signup_date</td><td>datetime</td><td>7,440</td><td>0.1%</td><td>2024-07-01</td><td>2021-01-01 / 2025-06-30</td></tr>
+              <tr><td>monthly_charges</td><td>numeric</td><td>3,450</td><td>0.5%</td><td>49.99</td><td>0.0 / 199.99</td></tr>
+              <tr><td>plan_type</td><td>categorical</td><td>4</td><td>2.8%</td><td>premium</td><td>—</td></tr>
+              <tr><td>churned</td><td>boolean</td><td>2</td><td>0%</td><td>0</td><td>—</td></tr>
+            </tbody>
+          </table>
+
+          <p class="muted" style="margin-top:10px">Tip: Save this table as a CSV so you can track changes over iterations.</p>
+        </section>
+
+        <!-- Missing data -->
+        <section class="card" id="missing">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Missing Data & Duplicates</h2>
+              <div class="muted">Patterns of missingness and common strategies</div>
+            </div>
+            <div class="badge">Data Quality</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            Missing values can be <strong>MCAR</strong> (Missing Completely at Random), <strong>MAR</strong> (Missing at Random),
+            or <strong>MNAR</strong> (Missing Not at Random). Determine which using domain knowledge and pattern checks.
+          </p>
+
+          <ul style="color:var(--muted)">
+            <li><strong>Visualize</strong> missingness matrix (rows vs columns)</li>
+            <li><strong>Impute</strong> with mean/median/mode or predictive models for MAR</li>
+            <li><strong>Flag</strong> missing with an indicator if missingness is informative</li>
+            <li><strong>Drop</strong> column if > X% missing and not important</li>
+            <li><strong>Check duplicates</strong> with a combination of keys and fuzzy matching</li>
+          </ul>
+
+          <div style="margin-top:10px">
+            <div class="muted">Missingness matrix (example):</div>
+            <div style="margin-top:8px; overflow:auto; border-radius:8px; padding:8px; background:rgba(0,0,0,0.2)">
+              <!-- simple missingness table -->
+              <table>
+                <thead><tr><th>row</th><th>customer_id</th><th>signup_date</th><th>monthly_charges</th><th>plan_type</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>●</td><td> </td><td> </td><td> </td></tr>
+                  <tr><td>2</td><td>●</td><td>●</td><td> </td><td> </td></tr>
+                  <tr><td>3</td><td>●</td><td> </td><td>●</td><td> </td></tr>
+                  <tr><td>4</td><td>●</td><td> </td><td> </td><td>●</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="muted" style="margin-top:8px">Legend: ● = present, blank = missing</div>
+          </div>
+        </section>
+
+        <!-- Univariate -->
+        <section class="card" id="univariate">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Univariate Analysis</h2>
+              <div class="muted">Distribution checks, summary stats, transformations</div>
+            </div>
+            <div class="pill">Univariate</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            For numeric variables: mean, median, std, skewness, kurtosis, percentiles. For categorical: value counts, top categories, rare levels.
+          </p>
+
+          <div class="example-grid" aria-hidden="false">
+            <div class="chart-card">
+              <strong>Histogram — numeric distribution</strong>
+              <canvas id="histChart" style="width:100%;height:160px;margin-top:8px"></canvas>
+            </div>
+
+            <div class="chart-card">
+              <strong>Boxplot-ish — summary + outliers</strong>
+              <canvas id="boxChart" style="width:100%;height:160px;margin-top:8px"></canvas>
+              <div class="muted" style="margin-top:8px">Use IQR or z-score to flag extreme values.</div>
+            </div>
+
+            <div class="chart-card">
+              <strong>Bar chart — categorical counts</strong>
+              <canvas id="barChart" style="width:100%;height:160px;margin-top:8px"></canvas>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Bivariate -->
+        <section class="card" id="bivariate">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Bivariate & Multivariate Analysis</h2>
+              <div class="muted">Relationships, correlation and interactions</div>
+            </div>
+            <div class="badge">Relationships</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            Check pairwise relationships using scatterplots; use grouped statistics to compare categories; compute correlation matrices for numeric features.
+          </p>
+
+          <div class="example-grid">
+            <div class="chart-card">
+              <strong>Scatter plot</strong>
+              <canvas id="scatterChart" style="width:100%;height:140px;margin-top:8px"></canvas>
+              <div class="muted" style="margin-top:8px">Hover to inspect points.</div>
+            </div>
+
+            <div class="chart-card">
+              <strong>Correlation matrix (color-coded)</strong>
+              <div id="corrMatrix" style="margin-top:8px; overflow:auto"></div>
+              <div class="muted" style="margin-top:8px">Correlation shows linear relationships — not causation.</div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- Time series -->
+        <section class="card" id="timeseries">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Time Series Exploration</h2>
+              <div class="muted">Trend, seasonality, resampling & rolling stats</div>
+            </div>
+            <div class="pill">Time Series</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            Convert columns to datetime, set index, resample to desired frequency, check trend and seasonality, compute rolling means and standard deviation.
+          </p>
+
+          <div class="chart-card" style="margin-top:8px">
+            <strong>Line chart with rolling mean</strong>
+            <canvas id="lineChart" style="width:100%;height:180px;margin-top:8px"></canvas>
+          </div>
+
+        </section>
+
+        <!-- Text -->
+        <section class="card" id="text">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Text & NLP Exploratory Checks</h2>
+              <div class="muted">Token counts, frequent tokens and length distributions</div>
+            </div>
+            <div class="badge">Text EDA</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            Sample checks: number of words, character distribution, top tokens, rare tokens, presence of stopwords, and length-based filters.
+          </p>
+
+          <pre><code># Example: count tokens per document (pandas)
+df['word_count'] = df['text'].str.split().map(len)
+df['char_count'] = df['text'].str.len()
+df['top_tokens'] = df['text'].str.lower().str.split().explode().value_counts().head(20)
+          </code></pre>
+        </section>
+
+        <!-- Feature eng -->
+        <section class="card" id="feature">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Feature Engineering Ideas (Exploratory)</h2>
+              <div class="muted">Simple transformations to try</div>
+            </div>
+            <div class="pill">Features</div>
+          </div>
+
+          <ul style="color:var(--muted)">
+            <li>Binning numeric variables (quantiles or domain bins)</li>
+            <li>Log/sqrt transforms for skewed distributions</li>
+            <li>Interaction terms (A * B) for non-linear relationships</li>
+            <li>Datetime features: day-of-week, hour, month, is_weekend</li>
+            <li>Encoding: one-hot for low-cardinality, target encoding for high-cardinality</li>
+            <li>Aggregate statistics for grouped data (mean per user, count per product)</li>
+          </ul>
+        </section>
+
+        <!-- Dimensionality / Clustering -->
+        <section class="card" id="dimensionality">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Dimensionality Reduction & Clustering (EDA Uses)</h2>
+              <div class="muted">PCA / t-SNE / UMAP to visualize high-dimensional structure</div>
+            </div>
+            <div class="badge">DR & Clusters</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            Use PCA to capture dominant variance, t-SNE/UMAP for local structure. Clustering (kmeans, hierarchical) can reveal natural groupings for segmentation.
+          </p>
+        </section>
+
+        <!-- Code Snippets -->
+        <section class="card" id="snippets">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Practical Code Snippets</h2>
+              <div class="muted">Copy-ready examples (pandas + matplotlib/Charting)</div>
+            </div>
+            <div class="pill">Snippets</div>
+          </div>
+
+          <pre><code># pandas: quick profile
+import pandas as pd
+df = pd.read_csv('data.csv', parse_dates=['signup_date'])
+profile = df.describe(include='all').T
+profile['missing_pct'] = df.isna().mean()*100
+profile.to_csv('data_profile.csv')
+</code></pre>
+
+          <pre><code># matplotlib: histogram + boxplot
+import matplotlib.pyplot as plt
+plt.figure(figsize=(8,4))
+plt.subplot(1,2,1); df['monthly_charges'].hist(bins=30); plt.title('Distribution')
+plt.subplot(1,2,2); df.boxplot(column=['monthly_charges']); plt.title('Boxplot')
+plt.tight_layout(); plt.show()
+</code></pre>
+
+          <pre><code># SQL: value counts
+SELECT plan_type, COUNT(*) as cnt
+FROM customers
+GROUP BY plan_type
+ORDER BY cnt DESC;
+</code></pre>
+
+          <div class="muted" style="margin-top:8px">Tip: Keep these snippets in your notebook and parameterize file paths.</div>
+        </section>
+
+        <!-- Ethics -->
+        <section class="card" id="ethics">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Ethics, Bias & Reporting</h2>
+              <div class="muted">Checks you should run before sharing insights</div>
+            </div>
+            <div class="badge">Ethics</div>
+          </div>
+
+          <ul style="color:var(--muted)">
+            <li>Document data provenance and transformations</li>
+            <li>Check class balance and sampling bias</li>
+            <li>Test model features for unfair proxies (e.g., zipcode → protected groups)</li>
+            <li>Redact or anonymize PII before sharing results</li>
+            <li>State limitations and confidence with visuals</li>
+          </ul>
+        </section>
+
+        <!-- Interactive area -->
+        <section class="card" id="interactive">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0">Interactive Visualization Playground</h2>
+              <div class="muted">Small demo charts driven by sample data — replace with your arrays</div>
+            </div>
+            <div class="pill">Interactive</div>
+          </div>
+
+          <div class="controls">
+            <button class="btn" onclick="shuffleData()">Shuffle Data</button>
+            <button class="btn" onclick="toggleOutliers()">Toggle Outliers</button>
+            <button class="btn" onclick="downloadPNG()">Download Current Chart</button>
+          </div>
+
+          <div class="example-grid" style="margin-top:12px">
+            <div class="chart-card"><strong>Distribution</strong><canvas id="demoHist" style="height:140px;margin-top:8px"></canvas></div>
+            <div class="chart-card"><strong>Scatter</strong><canvas id="demoScatter" style="height:140px;margin-top:8px"></canvas></div>
+            <div class="chart-card"><strong>Time series</strong><canvas id="demoLine" style="height:140px;margin-top:8px"></canvas></div>
+          </div>
+
+        </section>
+
+        <footer>
+          Created for Educational Purposes — DataScope: Data Exploration & Visualization • Data Science with Vamsi • © 2025
+        </footer>
+      </main>
+    </div>
+  </div>
+
+<script>
+/* --------------------------
+   Sample data and chart init
+   -------------------------- */
+
+function randn_bm() {
+  let u = 0, v = 0;
+  while(u === 0) u = Math.random();
+  while(v === 0) v = Math.random();
+  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  return num;
+}
+
+let baseData = {
+  numeric: Array.from({length:200}, ()=> Math.abs(Math.round(50 + 15*randn_bm()))),
+  x: Array.from({length:120}, (_,i)=> i),
+  ts: Array.from({length:120}, (_,i)=> 100 + 0.6*i + 10*Math.sin(i/6) + 8*randn_bm()),
+  scatterX: Array.from({length:200}, ()=> Math.round(100*Math.random())),
+  scatterY: Array.from({length:200}, ()=> Math.round(100*Math.random()))
+};
+
+let showOutliers = true;
+
+/* Histogram (Chart.js) */
+const histCtx = document.getElementById('histChart').getContext('2d');
+const demoHistCtx = document.getElementById('demoHist').getContext('2d');
+const barCtx = document.getElementById('barChart').getContext('2d');
+const boxCtx = document.getElementById('boxChart').getContext('2d');
+const scatterCtx = document.getElementById('scatterChart').getContext('2d');
+const demoScatterCtx = document.getElementById('demoScatter').getContext('2d');
+const demoLineCtx = document.getElementById('demoLine').getContext('2d');
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+
+function buildHistogram(ctx, values, label){
+  const bins = 12;
+  const min = Math.min(...values), max = Math.max(...values);
+  const step = (max-min)/bins;
+  const counts = new Array(bins).fill(0);
+  values.forEach(v => {
+    let idx = Math.floor((v-min)/step);
+    if(idx<0) idx=0; if(idx>=bins) idx=bins-1;
+    counts[idx]++;
+  });
+  const labels = counts.map((_,i)=> `${Math.round(min + i*step)}-${Math.round(min + (i+1)*step)}`);
+  return new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{ label: label||'distribution', data: counts, backgroundColor: 'rgba(96,165,250,0.9)'}]},
+    options:{ responsive:true, plugins:{ legend:{display:false}}, scales:{y:{ beginAtZero:true}}}
+  });
+}
+
+function buildBarChart(ctx, categories, counts){
+  return new Chart(ctx, {
+    type:'bar',
+    data:{ labels: categories, datasets:[{ label:'count', data: counts, backgroundColor:'rgba(96,165,250,0.9)'}]},
+    options:{ responsive:true, plugins:{ legend:{display:false}}, scales:{y:{ beginAtZero:true}}}
+  });
+}
+
+function buildBoxLike(ctx, values){
+  // approximate using box: show quartiles as bar segments
+  const sorted = [...values].sort((a,b)=>a-b);
+  const q1 = sorted[Math.floor(sorted.length*0.25)];
+  const q2 = sorted[Math.floor(sorted.length*0.5)];
+  const q3 = sorted[Math.floor(sorted.length*0.75)];
+  const min = sorted[0], max = sorted[sorted.length-1];
+  return new Chart(ctx, {
+    type:'bar',
+    data:{ labels:['min','Q1','median','Q3','max'], datasets:[{ label:'summary', data:[min,q1,q2,q3,max], backgroundColor:'rgba(96,165,250,0.9)'}]},
+    options:{ responsive:true, plugins:{ legend:{display:false}}, scales:{y:{ beginAtZero:true}}}
+  });
+}
+
+function buildScatter(ctx, xs, ys){
+  const data = xs.map((x,i)=>({x: x, y: ys[i]}));
+  return new Chart(ctx, {
+    type:'scatter',
+    data:{ datasets:[{ label:'x vs y', data, pointRadius:3 }]},
+    options:{ responsive:true, scales:{ x:{type:'linear'}, y:{type:'linear'}}, plugins:{ legend:{display:false}} }
+  });
+}
+
+function buildLine(ctx, xlabels, values){
+  const rolling = [];
+  for(let i=0;i<values.length;i++){
+    const win = values.slice(Math.max(0,i-6), i+1);
+    const avg = win.reduce((s,v)=>s+v,0)/win.length;
+    rolling.push(avg);
+  }
+  return new Chart(ctx, {
+    type:'line',
+    data:{ labels: xlabels, datasets:[
+      { label:'value', data: values, fill:false, borderColor:'rgba(96,165,250,0.85)', tension:0.2 },
+      { label:'rolling_mean', data: rolling, fill:false, borderColor:'rgba(125,211,252,0.9)', borderDash:[6,4], tension:0.2 }
+    ]},
+    options:{ responsive:true, plugins:{ legend:{display:true}}, scales:{ x:{display:true}, y:{display:true} } }
+  });
+}
+
+/* initial charts */
+let histChart = buildHistogram(histCtx, baseData.numeric, 'monthly_charges');
+let demoHist = buildHistogram(demoHistCtx, baseData.numeric, 'demo numeric');
+let barChart = buildBarChart(barCtx, ['basic','standard','premium','trial'], [1200,4500,2200,300]);
+let boxChart = buildBoxLike(boxCtx, baseData.numeric);
+let scatterChart = buildScatter(scatterCtx, baseData.scatterX, baseData.scatterY);
+let demoScatter = buildScatter(demoScatterCtx, baseData.scatterX, baseData.scatterY);
+let lineChart = buildLine(lineCtx, baseData.x, baseData.ts);
+let demoLine = buildLine(demoLineCtx, baseData.x.slice(0,60), baseData.ts.slice(0,60));
+
+/* correlation matrix rendering as a colored table */
+function renderCorrMatrix(container){
+  // sample corr values
+  const names = ['A','B','C','D','E'];
+  const matrix = [
+    [1,0.7,-0.2,0.12,0.33],
+    [0.7,1,-0.4,0.05,0.2],
+    [-0.2,-0.4,1,0.54,-0.1],
+    [0.12,0.05,0.54,1,0.02],
+    [0.33,0.2,-0.1,0.02,1]
+  ];
+  let html = '<table><thead><tr><th></th>';
+  names.forEach(n=> html += `<th>${n}</th>`);
+  html += '</tr></thead><tbody>';
+  matrix.forEach((row,i)=>{
+    html += `<tr><th>${names[i]}</th>`;
+    row.forEach(val=>{
+      const c = Math.round(255 - Math.abs(val)*180);
+      const bg = val>=0 ? `rgba(96,165,250,${Math.abs(val)})` : `rgba(250,96,96,${Math.abs(val)})`;
+      html += `<td style="background:${bg}; color:#001; font-weight:700;">${val.toFixed(2)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+renderCorrMatrix(document.getElementById('corrMatrix'));
+
+/* controls */
+function shuffleData(){
+  baseData.numeric = baseData.numeric.map(v => Math.max(1, Math.round(v + 15*randn_bm())));
+  // destroy and rebuild charts
+  histChart.destroy(); demoHist.destroy(); boxChart.destroy();
+  histChart = buildHistogram(histCtx, baseData.numeric);
+  demoHist = buildHistogram(demoHistCtx, baseData.numeric);
+  boxChart = buildBoxLike(boxCtx, baseData.numeric);
+  // scatter shuffle
+  baseData.scatterX = baseData.scatterX.map(()=> Math.round(120*Math.random()));
+  baseData.scatterY = baseData.scatterY.map(()=> Math.round(120*Math.random()));
+  scatterChart.destroy(); demoScatter.destroy();
+  scatterChart = buildScatter(scatterCtx, baseData.scatterX, baseData.scatterY);
+  demoScatter = buildScatter(demoScatterCtx, baseData.scatterX, baseData.scatterY);
+}
+
+function toggleOutliers(){
+  showOutliers = !showOutliers;
+  if(showOutliers){
+    baseData.numeric.push(300, 280, 260);
+  } else {
+    baseData.numeric = baseData.numeric.filter(v=> v<200);
+  }
+  shuffleData();
+}
+
+function downloadPNG(){
+  // download the histogram canvas as PNG for demo
+  const link = document.createElement('a');
+  link.href = document.getElementById('demoHist').toDataURL('image/png');
+  link.download = 'chart.png';
+  link.click();
+}
+
+/* utility to recreate correlation matrix or other displays on resize */
+window.addEventListener('resize', ()=>{ renderCorrMatrix(document.getElementById('corrMatrix')); });
+
+</script>
+</body>
+</html>

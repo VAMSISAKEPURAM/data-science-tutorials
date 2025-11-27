@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>NumPy for Data Science — Complete Practical Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Practical NumPy guide for data cleaning and preparation — definitions, importance, canonical patterns (vectorized ops, masking, broadcasting), and NumPy examples for data scientists."/>
+    <style>
+        :root{
+            --accent:#0b6b4a;
+            --muted:#6b7280;
+            --bg:#ffffff;
+            --card:#ffffff;
+            --code:#f7faf9;
+            --sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            --mono: "Consolas", "Courier New", monospace;
+        }
+        html,body{margin:0;padding:0;background:var(--bg);color:#0f172a;font-family:var(--sans);line-height:1.5;}
+        .header{background:linear-gradient(90deg,var(--accent),#059a5b);color:white;padding:20px 18px;text-align:center;}
+        .header h1{margin:0;font-size:1.6rem}
+        .header p{margin:6px 0 0;opacity:0.95;font-size:0.95rem}
+
+        .nav{background:#111827;color:white;display:flex;flex-wrap:wrap;gap:8px;padding:8px 12px;justify-content:center}
+        .nav a{color:white;text-decoration:none;padding:8px 12px;border-radius:6px;font-size:0.95rem}
+        .nav a:hover{background:#ffffff15}
+
+        .container{max-width:1100px;margin:20px auto;padding:0 16px 120px}
+        .card{background:var(--card);border-left:6px solid var(--accent);box-shadow:0 6px 18px rgba(16,24,40,0.06);padding:18px;margin:18px 0;border-radius:6px;page-break-inside:avoid}
+        h2{color:var(--accent);margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--accent)}
+        h3{margin:10px 0 6px}
+        p.lead{color:var(--muted);margin-top:6px}
+
+        pre.code, .code{background:var(--code);padding:14px;border-radius:6px;border-left:4px solid var(--accent);font-family:var(--mono);overflow-x:auto;white-space:pre-wrap;font-size:0.95rem}
+        table.param-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:0.95rem}
+        table.param-table th, table.param-table td{border:1px solid #e6eef0;padding:8px;text-align:left;vertical-align:top}
+        table.param-table th{background:var(--accent);color:white}
+
+        footer{background:#0b1220;color:white;text-align:center;padding:12px 14px;position:fixed;left:0;right:0;bottom:0;font-size:0.95rem}
+        footer small{color:#d1d5db;display:block;margin-top:6px;font-size:0.85rem}
+
+        @media print{
+            body{color:#000}
+            .nav{background:transparent;color:#000;box-shadow:none}
+            .nav a{color:#000}
+            .card{box-shadow:none;border-left:8px solid #0b6b4a;padding:12px;margin:14px 0;border-radius:0}
+            footer{position:fixed;bottom:8px;left:0;right:0;color:#111;background:transparent;font-size:11px}
+            pre.code{font-size:10.5px}
+            @page{size:A4;margin:20mm}
+            pre.code{page-break-inside:avoid}
+        }
+        .small{font-size:0.9rem;color:var(--muted)}
+        .kbd{font-family:var(--mono);background:#111827;color:white;padding:3px 6px;border-radius:4px;font-size:0.9rem}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>NumPy for Data Science — Complete Practical Guide</h1>
+        <p class="small">Concise, reproducible NumPy patterns for data cleaning, preparation, and numerical hygiene that every data scientist should know.</p>
+    </header>
+
+    <nav class="nav" aria-label="primary">
+        <a href="#what">What is NumPy?</a>
+        <a href="#why">Why NumPy Matters</a>
+        <a href="#ways">Ways NumPy Helps</a>
+        <a href="#numpy">NumPy — Essential Techniques</a>
+        <a href="#workflow">Workflow Checklist</a>
+        <a href="#resources">Resources</a>
+    </nav>
+
+    <main class="container">
+        <!-- WHAT -->
+        <section id="what" class="card" aria-labelledby="what-heading">
+            <h2 id="what-heading">What is NumPy?</h2>
+            <p class="lead">
+                <strong>NumPy</strong> (Numeric Python) is the fundamental package for scientific computing in Python. It provides a fast, memory-efficient N-dimensional array object (<code>ndarray</code>), vectorized operations, broadcasting, and tools for numerical routines (linear algebra, random sampling, FFT). NumPy is the low-level engine under many data-science libraries (Pandas, SciPy, scikit-learn, TensorFlow).
+            </p>
+            <p class="small">NumPy focuses on homogeneous, typed arrays and high-performance computation — ideal for large numeric datasets and for prepping data before modeling or passing to higher-level libraries.</p>
+        </section>
+
+        <!-- WHY -->
+        <section id="why" class="card" aria-labelledby="why-heading">
+            <h2 id="why-heading">Why NumPy Matters in Data Science</h2>
+            <p class="lead">
+                NumPy matters because performance and memory efficiency are critical when working with large numeric datasets. Vectorized operations and broadcasting let you replace slow Python loops with fast C-backed implementations.
+            </p>
+            <ul>
+                <li><strong>Speed:</strong> vectorized ops run in compiled code — orders of magnitude faster than Python loops for large arrays.</li>
+                <li><strong>Memory:</strong> compact, typed arrays reduce memory overhead vs. Python lists.</li>
+                <li><strong>Interoperability:</strong> many ML libraries accept NumPy arrays directly (scikit-learn, Keras, XGBoost).</li>
+                <li><strong>Deterministic numeric tools:</strong> primitives for masks, indexing, and linear algebra are essential for preprocessing.</li>
+            </ul>
+        </section>
+
+        <!-- WAYS -->
+        <section id="ways" class="card" aria-labelledby="ways-heading">
+            <h2 id="ways-heading">How NumPy Helps with Data Cleaning & Preparation</h2>
+            <p class="lead">NumPy provides the building blocks for many cleaning tasks a data scientist performs on numeric arrays before feeding data into models or visualizations.</p>
+            <h3>Primary categories</h3>
+            <ul>
+                <li><strong>Missing value handling:</strong> masks with <code>np.isnan</code>, sentinel replacement, and careful dtype choices.</li>
+                <li><strong>Vectorized transforms:</strong> apply arithmetic, scaling, normalization, and log transforms across arrays.</li>
+                <li><strong>Filtering & boolean indexing:</strong> select or remove rows based on numeric conditions quickly.</li>
+                <li><strong>Outlier detection:</strong> percentile-based or z-score methods with fast reductions.</li>
+                <li><strong>Reshaping & alignment:</strong> reshape, stack, split arrays; align multi-feature matrices for ML input.</li>
+                <li><strong>Type conversion & numeric stability:</strong> control precision (float32 vs float64), handle overflow/underflow, and manage infinities.</li>
+            </ul>
+        </section>
+
+        <!-- NUMPY ESSENTIALS -->
+        <section id="numpy" class="card" aria-labelledby="numpy-heading">
+            <h2 id="numpy-heading">NumPy — Essential Techniques (with examples)</h2>
+            <p class="lead">Below are the canonical NumPy patterns for cleaning, preparing, and transforming numeric data used in data science workflows.</p>
+
+            <h3 id="numpy-basics">1. Creating & inspecting arrays</h3>
+            <div class="code">
+import numpy as np
+# Create arrays
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+# Inspect
+arr.shape, arr.dtype, arr.ndim
+np.unique(arr)  # unique values
+            </div>
+            <p class="small">Prefer NumPy arrays over Python lists when you need numeric computation at scale.</p>
+
+            <h3 id="numpy-missing">2. Missing values, masks & sentinels</h3>
+            <div class="code">
+# Use np.nan for missing floats
+a = np.array([1.0, np.nan, 3.0, np.nan])
+np.isnan(a)            # boolean mask of missing
+np.nanmean(a)          # mean ignoring NaN
+
+# Replace sentinel values (e.g., -999) with np.nan
+a = np.array([1.0, -999.0, 3.0])
+a[a == -999] = np.nan
+
+# Remove rows with any NaN in a 2D array
+M = np.array([[1.0, 2.0], [np.nan, 4.0], [5.0, 6.0]])
+mask = ~np.isnan(M).any(axis=1)
+clean = M[mask]
+            </div>
+            <p class="small">Note: NumPy arrays require a float dtype to store <code>np.nan</code>. For mixed types or labeled data, convert to Pandas.</p>
+
+            <h3 id="numpy-typeconv">3. Type conversion & coercion</h3>
+            <div class="code">
+# Convert type
+x = np.array(["1", "2", "3"])
+xi = x.astype(int)
+
+# Safe numeric coercion with unknown values
+from numpy import vectorize
+
+def safe_int(s):
+    try:
+        return int(s)
+    except:
+        return np.nan
+
+v_safe_int = np.vectorize(safe_int)
+arr = v_safe_int(np.array(["1", "two", "3"]))
+            </div>
+            <p class="small">Use <code>astype</code> when you know values are clean; use vectorized safe parsers when inputs may be messy.</p>
+
+            <h3 id="numpy-vectorize">4. Vectorized operations & broadcasting</h3>
+            <div class="code">
+# Vectorized math (fast)
+a = np.arange(1_000_000)
+b = a * 2 + 3
+
+# Broadcasting example: normalize per-column
+X = np.random.rand(100, 3)
+col_means = X.mean(axis=0)
+X_centered = X - col_means  # broadcasting subtracts per-column means
+            </div>
+            <p class="small">Always prefer vectorized code over Python loops for numeric arrays.</p>
+
+            <h3 id="numpy-filtering">5. Boolean indexing & complex filters</h3>
+            <div class="code">
+# Simple filter
+x = np.linspace(0, 10, 11)
+mask = (x >= 2) & (x <= 8)
+subset = x[mask]
+
+# Multi-column filter on 2D array
+M = np.random.randn(100, 4)
+mask = (M[:,0] > 0) & (M[:,1] < 1.5)
+rows = M[mask]
+            </div>
+
+            <h3 id="numpy-outliers">6. Outlier detection & handling</h3>
+            <div class="code">
+# IQR clipping per column
+Q1 = np.nanpercentile(M, 25, axis=0)
+Q3 = np.nanpercentile(M, 75, axis=0)
+IQR = Q3 - Q1
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+# Clip values (keeps shape)
+M_clipped = np.clip(M, lower, upper)
+
+# Z-score method to find outlier rows
+means = np.nanmean(M, axis=0)
+stds = np.nanstd(M, axis=0)
+z = (M - means) / stds
+outlier_mask = np.abs(z) > 3
+rows_with_outliers = np.any(outlier_mask, axis=1)
+            </div>
+            <p class="small">Choose clipping when you want to keep dataset size; use removal when outliers indicate errors.</p>
+
+            <h3 id="numpy-scaling">7. Normalization & scaling</h3>
+            <div class="code">
+# Min-max scaling per column
+mins = M.min(axis=0)
+maxs = M.max(axis=0)
+M_scaled = (M - mins) / (maxs - mins)
+
+# Standard scaling (z-score)
+M_standard = (M - M.mean(axis=0)) / M.std(axis=0)
+            </div>
+            <p class="small">For ML pipelines prefer scikit-learn scalers (they implement fit/transform), but NumPy patterns are the underlying math.</p>
+
+            <h3 id="numpy-string">8. Vectorized string ops with <code>np.char</code></h3>
+            <div class="code">
+# Basic string cleanup
+s = np.array([" Alice ", "BOB", "cHarlie"]) 
+clean = np.char.strip(s)
+clean = np.char.title(clean)
+clean = np.char.replace(clean, "\u2019", "'")
+            </div>
+            <p class="small">String operations are available but limited. For heavy text cleaning, use Pandas or dedicated text libraries.</p>
+
+            <h3 id="numpy-reshape">9. Reshaping, stacking & concatenation</h3>
+            <div class="code">
+# Reshape
+v = np.arange(12)
+M = v.reshape(3,4)
+
+# Stack/concatenate
+A = np.random.rand(5,3)
+B = np.random.rand(7,3)
+full = np.vstack([A, B])  # same number of columns
+            </div>
+
+            <h3 id="numpy-unique-dedupe">10. Unique values & deduplication</h3>
+            <div class="code">
+# Unique rows
+rows = np.array([[1,2], [1,2], [3,4]])
+# To get unique rows, view as structured type
+uniq_rows = np.unique(rows, axis=0)
+
+# Unique with return index
+vals, idx = np.unique(rows[:,0], return_index=True)
+            </div>
+            <p class="small">Deduplicating structured numeric data is possible but often easier with Pandas for label-aware tasks.</p>
+
+            <h3 id="numpy-nans-infs">11. Infinities, numeric stability & safe reductions</h3>
+            <div class="code">
+# Detect inf and NaN
+np.isinf(M).any(), np.isnan(M).any()
+
+# Replace inf with nan then use nan-aware reductions
+M[np.isinf(M)] = np.nan
+col_means = np.nanmean(M, axis=0)
+            </div>
+            <p class="small">Be cautious when converting dtypes (float32 vs float64) — choose precision appropriate to your application to avoid unexpected behavior.</p>
+
+            <h3 id="numpy-helpers">12. Useful helper patterns</h3>
+            <div class="code">
+# Replace multiple sentinels using masks
+sentinels = [-999, -1e9]
+mask = np.isin(M, sentinels)
+M[mask] = np.nan
+
+# Apply a function along rows/columns with np.apply_along_axis (use sparingly)
+def robust_mean(row):
+    return np.nanmean(row)
+col_means = np.apply_along_axis(robust_mean, 0, M)
+            </div>
+        </section>
+
+        <!-- WORKFLOW -->
+        <section id="workflow" class="card" aria-labelledby="workflow-heading">
+            <h2 id="workflow-heading">Recommended NumPy Data Preparation Workflow (practical)</h2>
+            <ol>
+                <li><strong>Inspect:</strong> shapes, dtypes, quick stats (<code>arr.shape</code>, <code>arr.dtype</code>, <code>arr.mean(), arr.std()</code>).</li>
+                <li><strong>Normalize/standardize:</strong> center and scale numeric features appropriately for models.</li>
+                <li><strong>Handle missingness:</strong> use masks, replace sentinels, decide between imputation and removal.</li>
+                <li><strong>Detect & treat outliers:</strong> using percentiles or z-scores.</li>
+                <li><strong>Ensure correct dtype:</strong> floats for NaN, integers where safe, convert strings explicitly.</li>
+                <li><strong>Reshape/align:</strong> stack, transpose, or reshape to produce (n_samples, n_features).</li>
+                <li><strong>Validate:</strong> run sanity checks (no NaN in final feature matrix unless supported by downstream model).</li>
+                <li><strong>Persist:</strong> save arrays with <code>np.save</code> / <code>np.savez_compressed</code> or use Pandas for CSVs when human readability is required.</li>
+            </ol>
+
+            <div class="example-title small">Minimal reproducible NumPy cleaning script (end-to-end)</div>
+            <pre class="code">
+import numpy as np
+
+# Load numeric CSV into NumPy (fast) — use genfromtxt for missing values
+data = np.genfromtxt('raw_numeric.csv', delimiter=',', skip_header=1, filling_values=np.nan)
+
+# Basic cleanup
+# 1. Remove rows that are all NaN
+row_mask = ~np.isnan(data).all(axis=1)
+data = data[row_mask]
+
+# 2. Replace sentinel -999 with NaN
+data[np.isclose(data, -999)] = np.nan
+
+# 3. Impute column medians
+col_medians = np.nanmedian(data, axis=0)
+inds = np.where(np.isnan(data))
+data[inds] = np.take(col_medians, inds[1])
+
+# 4. Standardize
+means = data.mean(axis=0)
+stds = data.std(axis=0)
+X = (data - means) / stds
+
+# Save
+np.savez_compressed('cleaned_data.npz', X=X)
+            </pre>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resources" class="card" aria-labelledby="resources-heading">
+            <h2 id="resources-heading">Resources & further reading</h2>
+            <ul class="small">
+                <li>Official NumPy documentation — user guide and reference for ndarray and ufuncs.</li>
+                <li>"Python Data Science Handbook" by Jake VanderPlas — practical NumPy & Pandas recipes.</li>
+                <li>scikit-learn preprocessing docs — for production-ready scalers & transformers.</li>
+                <li>Great Expectations / data validation tools — to add checks after cleaning.</li>
+            </ul>
+            <p class="small">If you'd like, I can also add a short section mapping these NumPy patterns to equivalent scikit-learn preprocessing steps or provide downloadable Jupyter notebook examples.</p>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        Created for Educational Purposes – NumPy Practical Guide<br />
+        Data Science with Vamsi<br />
+        © 2025 Data Science Education Guide
+    </footer>
+</body>
+</html>

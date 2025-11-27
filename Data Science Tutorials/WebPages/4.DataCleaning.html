@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Pandas Data Cleaning — Complete Course-style Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Comprehensive Pandas Data Cleaning guide — definition, importance, common approaches (inspired by Google & IBM course material), and practical Pandas examples."/>
+    <style>
+        :root{
+            --accent:#0b6b4a;
+            --muted:#6b7280;
+            --bg:#ffffff;
+            --card:#ffffff;
+            --code:#f7faf9;
+            --sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            --mono: "Consolas", "Courier New", monospace;
+        }
+        html,body{margin:0;padding:0;background:var(--bg);color:#0f172a;font-family:var(--sans);line-height:1.5;}
+        .header{background:linear-gradient(90deg,var(--accent),#059a5b);color:white;padding:20px 18px;text-align:center;}
+        .header h1{margin:0;font-size:1.6rem}
+        .header p{margin:6px 0 0;opacity:0.95;font-size:0.95rem}
+
+        .nav{background:#111827;color:white;display:flex;flex-wrap:wrap;gap:8px;padding:8px 12px;justify-content:center}
+        .nav a{color:white;text-decoration:none;padding:8px 12px;border-radius:6px;font-size:0.95rem}
+        .nav a:hover{background:#ffffff15}
+
+        .container{max-width:1100px;margin:20px auto;padding:0 16px 120px}
+        .card{background:var(--card);border-left:6px solid var(--accent);box-shadow:0 6px 18px rgba(16,24,40,0.06);padding:18px;margin:18px 0;border-radius:6px;page-break-inside:avoid}
+        h2{color:var(--accent);margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--accent)}
+        h3{margin:10px 0 6px}
+        p.lead{color:var(--muted);margin-top:6px}
+
+        pre.code, .code{background:var(--code);padding:14px;border-radius:6px;border-left:4px solid var(--accent);font-family:var(--mono);overflow-x:auto;white-space:pre-wrap;font-size:0.95rem}
+        table.param-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:0.95rem}
+        table.param-table th, table.param-table td{border:1px solid #e6eef0;padding:8px;text-align:left;vertical-align:top}
+        table.param-table th{background:var(--accent);color:white}
+
+        footer{background:#0b1220;color:white;text-align:center;padding:12px 14px;position:fixed;left:0;right:0;bottom:0;font-size:0.95rem}
+        footer small{color:#d1d5db;display:block;margin-top:6px;font-size:0.85rem}
+
+        @media print{
+            body{color:#000}
+            .nav{background:transparent;color:#000;box-shadow:none}
+            .nav a{color:#000}
+            .card{box-shadow:none;border-left:8px solid #0b6b4a;padding:12px;margin:14px 0;border-radius:0}
+            footer{position:fixed;bottom:8px;left:0;right:0;color:#111;background:transparent;font-size:11px}
+            pre.code{font-size:10.5px}
+            @page{size:A4;margin:20mm}
+            pre.code{page-break-inside:avoid}
+        }
+        .small{font-size:0.9rem;color:var(--muted)}
+        .kbd{font-family:var(--mono);background:#111827;color:white;padding:3px 6px;border-radius:4px;font-size:0.9rem}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Pandas Data Cleaning — Course-style Guide</h1>
+        <p class="small">Structured like a learning module (definition, importance, approaches, and full Pandas examples). Sources reference Google &amp; IBM curriculum guidance and industry posts.</p>
+    </header>
+
+    <nav class="nav" aria-label="primary">
+        <a href="#what">What is Data Cleaning?</a>
+        <a href="#why">Why It Matters</a>
+        <a href="#ways">Ways to Clean Data</a>
+        <a href="#pandas">Pandas — All Essential Techniques</a>
+        <a href="#workflow">Workflow Checklist</a>
+        <a href="#resources">Resources</a>
+    </nav>
+
+    <main class="container">
+        <!-- WHAT -->
+        <section id="what" class="card" aria-labelledby="what-heading">
+            <h2 id="what-heading">What is Data Cleaning?</h2>
+            <p class="lead">
+                <strong>Data cleaning</strong> (also called <em>data cleansing</em> or <em>data scrubbing</em>) is the process of identifying and correcting errors, inconsistencies, and missing or malformed values in raw datasets so they become accurate, consistent, and ready for analysis. It includes removing duplicates, handling missing values, standardizing formats, and correcting structural and syntactic issues. :contentReference[oaicite:1]{index=1}
+            </p>
+
+            <p class="small">
+                Data cleaning is often combined with <strong>data wrangling</strong> — the broader process of transforming raw data into a structured, analysis-ready form. Many modern analytics courses (e.g. Google &amp; IBM) treat cleaning/wrangling as core components of early modules, teaching spreadsheet, SQL, and Python/Pandas techniques for these tasks. :contentReference[oaicite:2]{index=2}
+            </p>
+        </section>
+
+        <!-- WHY -->
+        <section id="why" class="card" aria-labelledby="why-heading">
+            <h2 id="why-heading">Why Data Cleaning Is Important</h2>
+            <p class="lead">
+                Clean data is the foundation for reliable analysis, dashboards, and machine learning. Without it, you'll get biased or incorrect results — the classic "garbage in, garbage out" problem.
+            </p>
+
+            <ul>
+                <li><strong>Supports accurate decision-making:</strong> Clean data reduces errors and increases confidence in insights. :contentReference[oaicite:3]{index=3}</li>
+                <li><strong>Improves model performance:</strong> Machine learning models trained on consistent, correct data perform better and generalize more reliably. :contentReference[oaicite:4]{index=4}</li>
+                <li><strong>Reduces downstream costs:</strong> Fixing problems early in the pipeline is cheaper than correcting analyses or retraining models after deployment. :contentReference[oaicite:5]{index=5}</li>
+                <li><strong>Time investment reality:</strong> Data professionals often spend a large share of their time cleaning data — industry estimates commonly place this at ~60–80% of a typical data analyst's workflow. Plan accordingly. :contentReference[oaicite:6]{index=6}</li>
+            </ul>
+        </section>
+
+        <!-- WAYS -->
+        <section id="ways" class="card" aria-labelledby="ways-heading">
+            <h2 id="ways-heading">How Many Ways Can We Clean Data? (High-level approaches)</h2>
+            <p class="lead">
+                There isn't a single "one-size-fits-all" method — instead, courses and practitioners teach a toolbox of approaches. Below are the primary categories and techniques you should know (these map to modules in Google Data Analytics and IBM Data Science curricula): :contentReference[oaicite:7]{index=7}
+            </p>
+
+            <h3>1. Manual / spreadsheet cleaning</h3>
+            <p class="small">Good for small datasets: sorting, filtering, find/replace, data validation, and formula-based imputation (Google's certificate emphasizes spreadsheet tasks for early exploration). :contentReference[oaicite:8]{index=8}</p>
+
+            <h3>2. SQL-based cleaning</h3>
+            <p class="small">Use SQL for structured databases: SELECT with WHERE, CAST/CONVERT, COALESCE, window functions to deduplicate, and DATE functions to standardize time fields. Google &amp; IBM curricula include SQL modules covering these techniques. :contentReference[oaicite:9]{index=9}</p>
+
+            <h3>3. Programmatic cleaning with Python &amp; Pandas</h3>
+            <p class="small">For larger, reproducible cleaning: Pandas (and related libraries) provide vectorized, repeatable operations — the dominant approach in IBM's courses. :contentReference[oaicite:10]{index=10}</p>
+
+            <h3>4. Automated & data-quality tools</h3>
+            <p class="small">Tools like Great Expectations, Deequ, or data-quality features in platforms can test and enforce quality rules at scale (often stacked into production pipelines).</p>
+
+            <h3>5. Specialized approaches</h3>
+            <p class="small">Text normalization + NLP for free text, deduplication algorithms for fuzzy matches, geocoding normalization for addresses, and time-series interpolation for sequential gaps.</p>
+        </section>
+
+        <!-- PANDAS ESSENTIALS -->
+        <section id="pandas" class="card" aria-labelledby="pandas-heading">
+            <h2 id="pandas-heading">Pandas — Complete Data Cleaning Techniques (with examples)</h2>
+            <p class="lead">The following covers the essential Pandas techniques you must master for cleaning tasks taught in data analytics &amp; data science programs.</p>
+
+            <!-- Missing data -->
+            <h3 id="pandas-missing">Missing Data: detect, summarize, decide</h3>
+            <div class="code">
+# Detect missing values
+df.isna().sum()          # count missing per column
+df.isna().mean().sort_values(ascending=False)  # proportion missing
+df.info()                # quick overview of non-null counts
+            </div>
+            <p class="small">Decide whether to drop, fill, or infer (interpolate) based on the meaning of the column and the amount of missingness.</p>
+
+            <h3>Strategies to handle missing values</h3>
+            <div class="code">
+# Drop rows or columns
+df.dropna(axis=0, how='any')   # drop rows with any missing
+df.dropna(axis=1, thresh=int(0.6*len(df)))  # drop cols with >40% missing
+
+# Fill values
+df['age'] = df['age'].fillna(df['age'].median())
+df.fillna({'city':'Unknown','score':0}, inplace=True)
+
+# Forward/backward fill for ordered data
+df.sort_values('date', inplace=True)
+df['value'] = df['value'].fillna(method='ffill')
+
+# Interpolate numeric series
+df['temp'] = df['temp'].interpolate(method='time')
+            </div>
+
+            <!-- Datatypes -->
+            <h3 id="pandas-types">Data types & conversion (critical)</h3>
+            <div class="code">
+# Convert strings to numeric/datetime
+df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+df['date'] = pd.to_datetime(df['date'], errors='coerce', infer_datetime_format=True)
+
+# Convert to category for memory & semantics
+df['country'] = df['country'].astype('category')
+            </div>
+
+            <h3 id="pandas-strings">String cleaning & normalization</h3>
+            <div class="code">
+# Trim, normalize case, remove extra spaces
+df['name'] = df['name'].str.strip().str.title().str.replace(r'\s+', ' ', regex=True)
+
+# Remove non-digits from phone numbers
+df['phone'] = df['phone'].str.replace(r'\D', '', regex=True)
+
+# Extract with regex
+df['zip'] = df['address'].str.extract(r'(\d{5})')
+            </div>
+
+            <h3 id="pandas-duplicates">Duplicates</h3>
+            <div class="code">
+# Find duplicates
+df.duplicated(subset=['email']).sum()
+
+# Drop duplicates, keep first or last
+df = df.drop_duplicates(subset=['email'], keep='first')
+            </div>
+
+            <h3 id="pandas-outliers">Outliers: detect & decide</h3>
+            <div class="code">
+# IQR method
+Q1 = df['price'].quantile(0.25)
+Q3 = df['price'].quantile(0.75)
+IQR = Q3 - Q1
+lower, upper = Q1 - 1.5*IQR, Q3 + 1.5*IQR
+outliers = df[(df['price'] < lower) | (df['price'] > upper)]
+
+# Clip values instead of dropping
+df['price_clipped'] = df['price'].clip(lower, upper)
+            </div>
+
+            <h3 id="pandas-encoding">Categorical encoding (for modeling)</h3>
+            <div class="code">
+# One-hot (get_dummies)
+df = pd.get_dummies(df, columns=['color'], prefix='color', drop_first=False)
+
+# Factorize for label codes
+df['city_code'], uniques = pd.factorize(df['city'])
+            </div>
+
+            <h3 id="pandas-merge">Merging, joining & concatenating</h3>
+            <div class="code">
+# SQL-style joins
+merged = pd.merge(df_left, df_right, how='left', left_on='id', right_on='user_id')
+
+# Concatenate (stack datasets)
+full = pd.concat([df_jan, df_feb], ignore_index=True)
+            </div>
+
+            <h3 id="pandas-dates">Time-series cleaning</h3>
+            <div class="code">
+# Ensure datetime index
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+df.set_index('date', inplace=True)
+# Resample and fill
+df.resample('D').mean().ffill()
+            </div>
+
+            <h3 id="pandas-helpers">Useful helper patterns</h3>
+            <div class="code">
+# Replace sentinel values with NaN, then handle
+df.replace({'': np.nan, 'NA': np.nan, '-999': np.nan}, inplace=True)
+
+# Apply vectorized functions instead of loops
+df['clean_description'] = df['description'].str.lower().str.replace(r'[^a-z0-9 ]', ' ', regex=True)
+            </div>
+        </section>
+
+        <!-- WORKFLOW -->
+        <section id="workflow" class="card" aria-labelledby="workflow-heading">
+            <h2 id="workflow-heading">Recommended Data Cleaning Workflow (practical)</h2>
+            <ol>
+                <li><strong>Inspect:</strong> <code>df.head()</code>, <code>df.info()</code>, <code>df.describe()</code>, <code>df.shape</code>.</li>
+                <li><strong>Backup raw data:</strong> keep raw file untouched and work on a copy.</li>
+                <li><strong>Standardize column names:</strong> <code>df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')</code></li>
+                <li><strong>Detect & document missingness:</strong> count missing and decide strategy per column.</li>
+                <li><strong>Fix types:</strong> numbers, dates, categories — convert early and handle parsing errors.</li>
+                <li><strong>Normalize text:</strong> trim, lower/title-case, remove duplicates of format variants.</li>
+                <li><strong>Deduplicate:</strong> join keys, fuzzy matches if needed.</li>
+                <li><strong>Address outliers:</strong> visualize, then remove/clip/winsorize as appropriate.</li>
+                <li><strong>Encode & reshape:</strong> prepare for analysis or ML.</li>
+                <li><strong>Validate & save:</strong> run sanity checks and save <code>df.to_csv('cleaned.csv', index=False)</code>.</li>
+            </ol>
+
+            <div class="example-title small">Minimal reproducible cleaning script (end-to-end)</div>
+            <pre class="code">
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('raw_data.csv')
+
+# Standardize column names
+df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
+
+# Replace common sentinels
+df.replace({'n/a': np.nan, 'na': np.nan, '': np.nan, '-': np.nan}, inplace=True)
+
+# Convert types
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+
+# Fill simple missing values
+df['amount'] = df['amount'].fillna(df['amount'].median())
+df['country'] = df['country'].fillna('Unknown')
+
+# Remove duplicates
+df.drop_duplicates(subset=['transaction_id'], inplace=True)
+
+# Save
+df.to_csv('cleaned_data.csv', index=False)
+            </pre>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resources" class="card" aria-labelledby="resources-heading">
+            <h2 id="resources-heading">Resources & course references</h2>
+            <p class="small">This guide distilled the data-cleaning and data-wrangling content you find in major course tracks. Key references:</p>
+            <ul class="small">
+                <li>Google Data Analytics Professional Certificate — practical spreadsheet, SQL, and basic data-wrangling modules. (Course emphasizes real-world cleaning with spreadsheets and SQL). :contentReference[oaicite:11]{index=11}</li>
+                <li>IBM Data Science / Data Analyst Professional Certificate — strong emphasis on Python, Pandas, and practical wrangling + visualization. :contentReference[oaicite:12]{index=12}</li>
+                <li>IBM Think article on 'What is Data Cleaning' — great concise definition and benefits. :contentReference[oaicite:13]{index=13}</li>
+                <li>Industry posts and tutorials (Tableau, Coursera articles) for practical checks and visualization-led cleaning. :contentReference[oaicite:14]{index=14}</li>
+                <li>Your uploaded WebScraping reference (useful for collecting raw data before cleaning). :contentReference[oaicite:15]{index=15}</li>
+            </ul>
+            <p class="small">If you want, I can add direct module-by-module breakdowns from Google or IBM (e.g., which exact course unit covers "cleaning data with spreadsheets" vs "Pandas cleaning examples").</p>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        Created for Educational Purposes – Complete Beginner's Guide to Data Science<br />
+        Data Science with Vamsi<br />
+        © 2025 Data Science Education Guide
+    </footer>
+</body>
+</html>

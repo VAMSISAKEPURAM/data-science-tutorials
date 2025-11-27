@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Pandas Data Cleaning — Complete Reference Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- PDF-friendly & screen CSS -->
+    <style>
+        /* --- Basic layout & typography --- */
+        :root{
+            --accent: #04AA6D;
+            --muted: #6b7280;
+            --bg: #ffffff;
+            --card-bg: #ffffff;
+            --code-bg: #f8f9fa;
+            --text: #111827;
+            --mono: "Consolas", "Courier New", monospace;
+            --sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        html,body{
+            height:100%;
+            background:var(--bg);
+            color:var(--text);
+            font-family:var(--sans);
+            margin:0;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            line-height:1.5;
+            font-size:15px;
+        }
+
+        /* Header */
+        .header{
+            background: linear-gradient(90deg, var(--accent), #059a5b);
+            color:white;
+            padding:20px 24px;
+            text-align:center;
+        }
+        .header h1{ margin:0; font-size:1.6rem; letter-spacing:0.2px; }
+        .header p{ margin:6px 0 0; opacity:0.95; }
+
+        /* Navigation (simple for PDF friendliness; avoid sticky printing issues) */
+        .nav{
+            background:#111827;
+            color:white;
+            display:flex;
+            flex-wrap:wrap;
+            gap:6px;
+            padding:8px 12px;
+            justify-content:center;
+        }
+        .nav a{
+            color:white;
+            text-decoration:none;
+            padding:8px 12px;
+            display:inline-block;
+            border-radius:4px;
+            font-size:0.95rem;
+        }
+        .nav a:hover{ background:#ffffff22; }
+
+        /* Main content */
+        .container{
+            max-width:1000px;
+            margin:20px auto;
+            padding:0 16px 80px;
+        }
+
+        /* Card style */
+        .card{
+            background:var(--card-bg);
+            border-left:6px solid var(--accent);
+            box-shadow:0 6px 18px rgba(16,24,40,0.06);
+            padding:18px;
+            margin:18px 0;
+            border-radius:6px;
+            page-break-inside: avoid;
+        }
+        h2{ color:var(--accent); margin:0 0 12px; font-size:1.15rem; border-bottom:2px solid var(--accent); padding-bottom:6px; }
+        h3{ margin:0 0 8px; font-size:1rem; color:#0f172a; }
+        p.lead{ margin:6px 0 14px; color:var(--muted); }
+
+        /* Code blocks - preformatted and copyable */
+        pre.code, .code{
+            background:var(--code-bg);
+            padding:14px;
+            border-radius:6px;
+            border-left:4px solid var(--accent);
+            font-family:var(--mono);
+            font-size:0.9rem;
+            overflow-x:auto;
+            white-space:pre;
+            margin:10px 0;
+        }
+
+        /* Tables for parameter lists */
+        .param-table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:12px;
+            font-size:0.92rem;
+        }
+        .param-table th, .param-table td{
+            border:1px solid #e6e9ee;
+            padding:8px 10px;
+            text-align:left;
+            vertical-align:top;
+        }
+        .param-table th{ background:var(--accent); color:white; font-weight:600; }
+        .param-table tr:nth-child(even){ background:#fbfdff; }
+
+        /* Footer */
+        footer{
+            background:#0b1220;
+            color:white;
+            text-align:center;
+            padding:12px 14px;
+            position:fixed;
+            left:0;
+            right:0;
+            bottom:0;
+            font-size:0.95rem;
+        }
+        footer small{ color:#d1d5db; display:block; margin-top:6px; font-size:0.85rem; }
+
+        /* Responsive adjustments */
+        @media (max-width:700px){
+            .container{ padding:0 12px 120px; }
+            .nav{ gap:8px; padding:8px 8px; }
+        }
+
+        /* --- Print-specific styles to make PDF export clean --- */
+        @media print{
+            :root{ --accent:#0b6b4a; }
+            body{ background:white; color:#000; }
+            .nav{ background:transparent; color:#000; box-shadow:none; }
+            .nav a{ color:#000; background:transparent; padding:0 6px; }
+            header, .nav{ page-break-after:avoid; }
+            .card{ box-shadow:none; border-left:8px solid #0b6b4a; padding:12px; margin:14px 0; border-radius:0; }
+            footer{
+                position:fixed;
+                bottom:8px;
+                left:0;
+                right:0;
+                color:#111;
+                background:transparent;
+                font-size:11px;
+            }
+            pre.code, .code{ font-size:10.5px; }
+            @page{
+                size:A4;
+                margin:20mm;
+            }
+            /* Avoid breaking code blocks across pages */
+            pre.code{ page-break-inside:avoid; }
+        }
+
+        /* Utility classes */
+        .muted{ color:var(--muted); font-size:0.95rem; }
+        .example-title{ font-weight:600; margin-top:8px; }
+        .small{ font-size:0.9rem; color:var(--muted); }
+        .kbd{ background:#111827; color:white; padding:2px 6px; border-radius:4px; font-family:var(--mono); font-size:0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pandas — Complete Data Cleaning & Visualization Reference</h1>
+        <p class="small">Comprehensive, print-friendly guide: everything essential for cleaning data with Pandas (with examples & syntax)</p>
+    </div>
+
+    <nav class="nav" aria-label="Main navigation">
+        <a href="#overview">Overview</a>
+        <a href="#missing">Missing Data</a>
+        <a href="#dtypes">Data Types & Conversion</a>
+        <a href="#duplicates">Duplicates</a>
+        <a href="#outliers">Outliers & Scaling</a>
+        <a href="#strings">String Cleaning</a>
+        <a href="#cols_rows">Columns & Rows</a>
+        <a href="#inconsist">Inconsistencies & Mapping</a>
+        <a href="#categorical">Categorical Encoding</a>
+        <a href="#dates">Date & Time</a>
+        <a href="#merge">Integration & Merging</a>
+        <a href="#reshape">Reshaping</a>
+        <a href="#viz">Visualization</a>
+    </nav>
+
+    <main class="container" role="main">
+        <!-- OVERVIEW -->
+        <section id="overview" class="card" aria-labelledby="overviewHeading">
+            <h2 id="overviewHeading">Overview — Data Cleaning with Pandas</h2>
+            <p class="lead">
+                Data cleaning is the process of detecting, correcting, and preparing data for analysis. This guide collects the core Pandas functions, idioms, and code snippets used in real-world data cleaning workflows — from detecting missing values to handling dates, outliers, strings, categorical encoding, and visual checks.
+            </p>
+            <div class="code">
+# Recommended imports
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load data
+df = pd.read_csv("data.csv")
+df.head()
+            </div>
+            <p class="small">Tip: keep a reproducible notebook or script with the data-cleaning steps (so you can re-run preprocessing whenever datasets update).</p>
+        </section>
+
+        <!-- MISSING DATA -->
+        <section id="missing" class="card" aria-labelledby="missingHeading">
+            <h2 id="missingHeading">Missing Data — Detection & Handling</h2>
+            <p class="muted">Missing values are one of the most common problems. Pandas provides many tools for detecting and handling them.</p>
+
+            <h3>Detect missing values</h3>
+            <div class="code">
+df.isna()           # boolean DataFrame of missing values
+df.isnull().sum()   # count per column
+df.isna().mean()    # proportion of missing per column
+df.info()           # quick summary showing non-null counts
+            </div>
+            <p class="small">Use <code>df.isna()</code> and aggregations to determine which columns need attention.</p>
+
+            <h3>Drop missing values</h3>
+            <div class="code">
+# Drop rows with any missing values
+df_clean = df.dropna(axis=0, how='any')
+
+# Drop rows that have missing values in specific columns
+df_clean = df.dropna(subset=['col1','col2'])
+
+# Drop columns with too many missing values
+df.dropna(axis=1, thresh=int(0.6*len(df)), inplace=True)  # keep cols with >=60% non-null
+            </div>
+            <table class="param-table" aria-label="dropna params">
+                <tr><th>Parameter</th><th>Meaning</th></tr>
+                <tr><td>axis</td><td>0 drop rows, 1 drop columns</td></tr>
+                <tr><td>how</td><td>'any' (drop if any NA), 'all' (drop if all NA)</td></tr>
+                <tr><td>subset</td><td>list of columns to check</td></tr>
+                <tr><td>thresh</td><td>require at least thresh non-NA values</td></tr>
+            </table>
+
+            <h3>Fill missing values</h3>
+            <p class="small">Choose filling strategy depending on column type and context.</p>
+            <div class="code">
+# Fill with scalar
+df['Age'] = df['Age'].fillna(0)
+
+# Fill numeric with column mean/median
+df['Salary'] = df['Salary'].fillna(df['Salary'].median())
+
+# Forward/backward fill (time-series or ordered data)
+df.sort_values('Date', inplace=True)
+df['Value'] = df['Value'].fillna(method='ffill')  # forward fill
+
+# Fill per-column with a dict
+df.fillna({'Age': df['Age'].median(), 'City': 'Unknown'}, inplace=True)
+            </div>
+            <table class="param-table" aria-label="fillna params">
+                <tr><th>Parameter</th><th>Meaning</th></tr>
+                <tr><td>value</td><td>scalar or dict per column</td></tr>
+                <tr><td>method</td><td>'ffill' or 'bfill' (forward/backward fill)</td></tr>
+                <tr><td>limit</td><td>max consecutive fills</td></tr>
+            </table>
+
+            <h3>Replace & interpolate</h3>
+            <div class="code">
+# Replace specific sentinel values with NaN, then handle them
+df.replace({'': np.nan, 'NA': np.nan, -1: np.nan}, inplace=True)
+
+# Interpolate numeric columns (linear/time)
+df['temperature'] = df['temperature'].interpolate(method='linear', limit_direction='both')
+            </div>
+            <p class="small">Use interpolation for numeric series where values are missing in short sequences and a smooth estimate is reasonable.</p>
+        </section>
+
+        <!-- DATA TYPES -->
+        <section id="dtypes" class="card" aria-labelledby="dtypesHeading">
+            <h2 id="dtypesHeading">Data Types & Conversion</h2>
+            <p class="muted">Correct types are essential (numbers as numeric, dates as datetime, categories as category dtype). Converting early prevents subtle bugs.</p>
+
+            <h3>Inspect types</h3>
+            <div class="code">
+df.dtypes
+df.select_dtypes(include='object').columns  # textual columns
+df.select_dtypes(include=['number']).columns
+            </div>
+
+            <h3>Convert types</h3>
+            <div class="code">
+# Convert to numeric (coerce invalid -> NaN)
+df['col'] = pd.to_numeric(df['col'], errors='coerce')
+
+# Convert to datetime
+df['date'] = pd.to_datetime(df['date'], errors='coerce', dayfirst=False, infer_datetime_format=True)
+
+# Convert to timedelta
+df['duration'] = pd.to_timedelta(df['duration'], errors='coerce')
+
+# Convert to category for memory & semantics
+df['color'] = df['color'].astype('category')
+
+# Generic astype
+df = df.astype({'id':'int64','price':'float64'}) 
+            </div>
+            <p class="small">Use <code>errors='coerce'</code> to turn invalid parsing into NaN and then handle them explicitly.</p>
+
+            <h3>Safe conversion helpers</h3>
+            <div class="code">
+# Attempt conversion with fallback
+def to_int_safe(x):
+    try:
+        return int(x)
+    except:
+        return np.nan
+
+df['col_int'] = df['col'].apply(to_int_safe)
+            </div>
+        </section>
+
+        <!-- DUPLICATES -->
+        <section id="duplicates" class="card" aria-labelledby="dupsHeading">
+            <h2 id="dupsHeading">Duplicates — Detecting & Removing</h2>
+            <p class="muted">Duplicates can arise from bad merges, repeated scraping, or logging issues.</p>
+
+            <h3>Detect duplicates</h3>
+            <div class="code">
+# Boolean mask of duplicates (first occurrence kept)
+mask = df.duplicated()
+df[mask]
+
+# Duplicates based on specific subset of columns
+df[df.duplicated(subset=['name','email'])]
+            </div>
+
+            <h3>Drop duplicates</h3>
+            <div class="code">
+# Remove duplicates, keep first (default)
+df = df.drop_duplicates()
+
+# Keep last occurrence
+df = df.drop_duplicates(subset=['name','email'], keep='last')
+
+# Drop all rows that have duplicates (keep=False)
+df = df.drop_duplicates(subset=['name','email'], keep=False)
+            </div>
+        </section>
+
+        <!-- OUTLIERS -->
+        <section id="outliers" class="card" aria-labelledby="outliersHeading">
+            <h2 id="outliersHeading">Outliers & Scaling</h2>
+            <p class="muted">Outlier handling depends on whether outliers are errors or informative. Always visualize before removing.</p>
+
+            <h3>IQR method</h3>
+            <div class="code">
+Q1 = df['col'].quantile(0.25)
+Q3 = df['col'].quantile(0.75)
+IQR = Q3 - Q1
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+outliers = df[(df['col'] < lower) | (df['col'] > upper)]
+non_outliers = df[(df['col'] >= lower) & (df['col'] <= upper)]
+            </div>
+
+            <h3>Z-score method</h3>
+            <div class="code">
+from scipy import stats
+z_scores = np.abs(stats.zscore(df['col'].dropna()))
+mask = (z_scores > 3)  # typical threshold
+outliers = df.loc[df['col'].dropna().index[mask]]
+            </div>
+
+            <h3>Clipping & Winsorizing</h3>
+            <div class="code">
+# Clip to bounds
+df['col_clipped'] = df['col'].clip(lower=lower, upper=upper)
+
+# Winsorize (using scipy) - cap extreme values rather than drop
+from scipy.stats.mstats import winsorize
+df['col_win'] = winsorize(df['col'], limits=[0.01, 0.01])  # 1% on each side
+            </div>
+
+            <h3>Scaling (for ML pipelines)</h3>
+            <div class="code">
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+scaler = StandardScaler()
+df[['num1','num2']] = scaler.fit_transform(df[['num1','num2']])
+            </div>
+            <p class="small">Do scaling after splitting train/test to avoid data leakage when building models.</p>
+        </section>
+
+        <!-- STRING CLEANING -->
+        <section id="strings" class="card" aria-labelledby="stringsHeading">
+            <h2 id="stringsHeading">String Cleaning & Text Normalization</h2>
+            <p class="muted">Text columns often require trimming, casing, pattern extraction, and handling of inconsistent separators.</p>
+
+            <h3>Basic string ops (.str)</h3>
+            <div class="code">
+# Lowercase/strip
+df['name'] = df['name'].str.strip().str.lower()
+
+# Replace substrings or regex
+df['phone'] = df['phone'].str.replace(r'\D', '', regex=True)  # remove non-digits
+
+# Check contains
+mask = df['email'].str.contains('@', na=False)
+
+# Split and extract
+df['domain'] = df['email'].str.split('@').str[1]
+
+# Extract with regex
+df['zip'] = df['address'].str.extract(r'(\d{5})')
+            </div>
+
+            <h3>Normalize whitespace & punctuation</h3>
+            <div class="code">
+# Normalize multiple spaces to single, and strip
+df['text'] = df['text'].str.replace(r'\s+', ' ', regex=True).str.strip()
+
+# Replace unusual quotes or characters
+df['text'] = df['text'].str.replace('“', '"').str.replace('”','"')
+            </div>
+
+            <h3>Tokenization & more (lightweight)</h3>
+            <div class="code">
+# Simple tokenization
+df['tokens'] = df['text'].str.split()
+
+# Count words
+df['word_count'] = df['tokens'].str.len()
+            </div>
+            <p class="small">For advanced NLP cleaning use libraries such as <code>spaCy</code> or <code>nltk</code>.</p>
+        </section>
+
+        <!-- COLUMNS & ROWS -->
+        <section id="cols_rows" class="card" aria-labelledby="colsHeading">
+            <h2 id="colsHeading">Columns & Rows — Rename, Drop, Reorder, Impute</h2>
+
+            <h3>Rename & reorder</h3>
+            <div class="code">
+# Rename columns
+df = df.rename(columns={'old_name':'new_name'})
+
+# Rename in-place
+df.rename(columns=str.lower, inplace=True)
+
+# Reorder columns
+cols = ['id','name','email','age']
+df = df[cols]
+            </div>
+
+            <h3>Drop columns & rows</h3>
+            <div class="code">
+df.drop(['unnecessary_col'], axis=1, inplace=True)
+df.drop(index=[0,1,2], inplace=True)   # drop by index labels
+            </div>
+
+            <h3>Insert & create columns</h3>
+            <div class="code">
+# Create derived column
+df['age_group'] = pd.cut(df['age'], bins=[0,18,35,60,120], labels=['child','young','adult','senior'])
+
+# Insert at position
+df.insert(2, 'uid', range(1, len(df)+1))
+            </div>
+
+            <h3>Reindexing & resetting index</h3>
+            <div class="code">
+# Reset index after filtering
+df = df.reset_index(drop=True)
+
+# Set index to a column
+df = df.set_index('id')
+
+# Reindex to include missing rows (useful for timeseries)
+new_index = pd.date_range(start='2020-01-01', end='2020-12-31', freq='D')
+df = df.reindex(new_index)
+            </div>
+        </section>
+
+        <!-- INCONSISTENCIES & MAPPING -->
+        <section id="inconsist" class="card" aria-labelledby="inconsistHeading">
+            <h2 id="inconsistHeading">Handling Inconsistencies — Mapping & Conditional Fixes</h2>
+
+            <h3>Map values & standardize categories</h3>
+            <div class="code">
+# Map variants to canonical values
+city_map = {'ny': 'New York', 'nyc': 'New York', 'n.y.': 'New York'}
+df['city_clean'] = df['city'].str.lower().map(city_map).fillna(df['city'].str.title())
+
+# Use replace for many-to-many replacements
+df['status'] = df['status'].replace({'Y':'Yes','N':'No','unknown':np.nan})
+            </div>
+
+            <h3>Conditional changes — where & mask</h3>
+            <div class="code">
+# Where: retain values where condition is True else replace
+df['score_clean'] = df['score'].where(df['score'] >= 0, other=np.nan)
+
+# Mask: replace values where condition is True
+df.loc[df['age'] < 0, 'age'] = np.nan
+            </div>
+
+            <h3>Apply / applymap for custom fixes</h3>
+            <div class="code">
+# Elementwise on a Series
+df['col'] = df['col'].apply(lambda x: x.strip() if isinstance(x, str) else x)
+
+# Applymap over entire DataFrame (use carefully — slow)
+df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+            </div>
+            <p class="small">Prefer vectorized Pandas string/Numpy ops when possible — they are faster than Python loops.</p>
+        </section>
+
+        <!-- CATEGORICAL ENCODING -->
+        <section id="categorical" class="card" aria-labelledby="catHeading">
+            <h2 id="catHeading">Categorical Data — Encoding & Categories</h2>
+
+            <h3>Category dtype</h3>
+            <div class="code">
+df['city'] = df['city'].astype('category')
+df['city'].cat.categories    # list categories
+df['city'].cat.codes         # numeric codes
+            </div>
+
+            <h3>One-hot encoding</h3>
+            <div class="code">
+# Using pandas
+df = pd.get_dummies(df, columns=['color'], prefix='color', drop_first=False)
+
+# Or for specific column
+dummies = pd.get_dummies(df['size'], prefix='size')
+df = pd.concat([df, dummies], axis=1)
+            </div>
+
+            <h3>Label encoding / factorize</h3>
+            <div class="code">
+# Simple numeric codes
+df['city_code'], uniques = pd.factorize(df['city'])
+            </div>
+            <p class="small">Choose encoding based on model needs — one-hot for nominal small-cardinality features, ordinal/coded for ordered categories.</p>
+        </section>
+
+        <!-- DATES & TIMES -->
+        <section id="dates" class="card" aria-labelledby="datesHeading">
+            <h2 id="datesHeading">Date & Time Cleaning</h2>
+
+            <h3>Convert to datetime</h3>
+            <div class="code">
+df['date'] = pd.to_datetime(df['date_str'], errors='coerce', infer_datetime_format=True)
+
+# If day-first date strings
+df['date'] = pd.to_datetime(df['date_str'], dayfirst=True, errors='coerce')
+            </div>
+
+            <h3>Use the .dt accessor</h3>
+            <div class="code">
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['weekday'] = df['date'].dt.day_name()
+df['is_weekend'] = df['date'].dt.weekday >= 5
+            </div>
+
+            <h3>Resampling & filling time gaps</h3>
+            <div class="code">
+# Set index to datetime
+df_ts = df.set_index('date').sort_index()
+
+# Resample to daily, filling forward
+df_ts.resample('D').mean().ffill()
+
+# Rolling window example
+df_ts['7day_avg'] = df_ts['value'].rolling(window=7).mean()
+            </div>
+        </section>
+
+        <!-- MERGE & INTEGRATION -->
+        <section id="merge" class="card" aria-labelledby="mergeHeading">
+            <h2 id="mergeHeading">Data Integration — Merge, Join & Concat</h2>
+
+            <h3>pd.merge (SQL-style joins)</h3>
+            <div class="code">
+# Inner join
+pd.merge(df_left, df_right, how='inner', on='id')
+
+# Left join with different key names
+pd.merge(emp, dept, left_on='dept_id', right_on='id', how='left')
+
+# Multiple keys
+pd.merge(a, b, on=['id','date'], how='outer')
+            </div>
+
+            <h3>Concatenate & append</h3>
+            <div class="code">
+# Stack vertically
+pd.concat([df1, df2], axis=0, ignore_index=True)
+
+# Side-by-side
+pd.concat([df1, df2], axis=1)
+            </div>
+
+            <h3>Join using index</h3>
+            <div class="code">
+# Join on index
+df_left.join(df_right, how='left')
+            </div>
+            <p class="small">Be explicit about <code>how</code> and check for unintended cartesian products when keys are not unique.</p>
+        </section>
+
+        <!-- RESHAPING -->
+        <section id="reshape" class="card" aria-labelledby="reshapeHeading">
+            <h2 id="reshapeHeading">Reshaping Data — Pivot, Melt, Stack, Unstack</h2>
+
+            <h3>Pivot / pivot_table</h3>
+            <div class="code">
+# Simple pivot
+df.pivot(index='date', columns='region', values='sales')
+
+# pivot_table with aggregation (handles duplicates)
+df.pivot_table(index='date', columns='region', values='sales', aggfunc='sum', fill_value=0)
+            </div>
+
+            <h3>Melt (wide → long)</h3>
+            <div class="code">
+df_long = df.melt(id_vars=['id','date'], value_vars=['var1','var2'], var_name='variable', value_name='value')
+            </div>
+
+            <h3>Stack / Unstack</h3>
+            <div class="code">
+stacked = df.set_index(['id','date']).stack()
+unstacked = stacked.unstack(level=-1)
+            </div>
+        </section>
+
+        <!-- VISUALIZATION -->
+        <section id="viz" class="card" aria-labelledby="vizHeading">
+            <h2 id="vizHeading">Visualization — Quick Visual Checks for Cleaning</h2>
+            <p class="muted">Visual checks are essential: missingness maps, boxplots for outliers, histograms for distributions, scatter for relationships.</p>
+
+            <h3>Missingness visualization</h3>
+            <div class="code">
+# Simple missingness heatmap using seaborn (if available)
+import seaborn as sns
+sns.heatmap(df.isna(), cbar=False)
+plt.title('Missing values map')
+plt.show()
+            </div>
+
+            <h3>Distribution checks</h3>
+            <div class="code">
+# Histogram
+df['salary'].plot(kind='hist', bins=30)
+plt.title('Salary distribution')
+plt.xlabel('Salary')
+plt.show()
+
+# Boxplot for outliers
+df.boxplot(column='salary')
+plt.show()
+            </div>
+
+            <h3>Scatter & correlation</h3>
+            <div class="code">
+# Scatter plot
+df.plot.scatter(x='age', y='salary')
+
+# Correlation heatmap
+sns.heatmap(df.select_dtypes(include='number').corr(), annot=True, fmt=".2f")
+plt.show()
+            </div>
+
+            <h3>Time-series visual checks</h3>
+            <div class="code">
+# Line plot (after setting datetime index)
+df_ts['value'].plot()
+plt.title('Timeseries of value')
+plt.show()
+            </div>
+            <p class="small">Always plot before removing outliers or filling gaps — plots often reveal issues not obvious from tables.</p>
+        </section>
+
+        <!-- CHECKLIST & WORKFLOW -->
+        <section id="workflow" class="card" aria-labelledby="workflowHeading">
+            <h2 id="workflowHeading">Practical Data Cleaning Workflow Checklist</h2>
+            <ol>
+                <li>Inspect data: <code>df.head()</code>, <code>df.info()</code>, <code>df.describe()</code>, <code>df.shape</code>.</li>
+                <li>Identify and handle missing values (drop/fill/interpolate) based on context.</li>
+                <li>Correct data types (<code>to_numeric</code>, <code>to_datetime</code>, <code>astype('category')</code>).</li>
+                <li>Detect & resolve duplicates (<code>duplicated()</code>, <code>drop_duplicates()</code>).</li>
+                <li>Standardize text columns (.str methods): casing, whitespace, punctuation.</li>
+                <li>Fix inconsistent categories (map/replace), create canonical forms.</li>
+                <li>Handle outliers carefully (visualize, then decide: clip/winsorize/remove).</li>
+                <li>Encode categorical variables appropriately for downstream tasks.</li>
+                <li>Reshape/merge/concatenate as needed & validate joins (check row counts).</li>
+                <li>Save cleaned dataset (<code>df.to_csv('cleaned.csv', index=False)</code>) and document changes.</li>
+            </ol>
+
+            <div class="example-title">Example: Minimal reproducible cleaning script</div>
+            <pre class="code">
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("raw.csv")
+
+# 1. Standardize column names
+df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
+
+# 2. Replace sentinel values
+df.replace({'': np.nan, 'n/a': np.nan, 'NA': np.nan, '-': np.nan}, inplace=True)
+
+# 3. Convert types
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+
+# 4. Fill missing
+df['amount'] = df['amount'].fillna(df['amount'].median())
+
+# 5. Remove duplicates
+df.drop_duplicates(subset=['transaction_id'], inplace=True)
+
+# 6. Save cleaned file
+df.to_csv("cleaned.csv", index=False)
+            </pre>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resources" class="card" aria-labelledby="resourcesHeading">
+            <h2 id="resourcesHeading">Additional Tips & Resources</h2>
+            <ul>
+                <li>Keep an immutable copy of the raw data; perform cleaning on a copied DataFrame.</li>
+                <li>Use small exploratory scripts then encapsulate repeated logic into functions.</li>
+                <li>Version your cleaned datasets (e.g., include date in filename) to track changes.</li>
+                <li>For large datasets consider <code>dask.dataframe</code> or sampling for exploration.</li>
+                <li>Consider writing tests for cleaning functions (unit tests for corner cases).</li>
+            </ul>
+            <div class="small">Suggested reading: Pandas official docs (user guide), "Python for Data Analysis" by Wes McKinney, and various data-cleaning notebooks on GitHub.</div>
+        </section>
+    </main>
+
+    <!-- Footer - EXACT text provided by user -->
+    <footer role="contentinfo" aria-label="Footer">
+        Created for Educational Purposes – Complete Beginner's Guide to Data Science<br />
+        Data Science with Vamsi<br />
+        © 2025 Data Science Education Guide
+    </footer>
+</body>
+</html>

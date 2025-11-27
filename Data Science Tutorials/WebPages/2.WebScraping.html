@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Scraping for Beginners - Data Science Foundation</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      line-height: 1.6;
+      margin: 20px;
+    }
+    h1 {
+      color: #1e3c72;
+      text-align: center;
+      font-size: 2rem;
+    }
+    h2 {
+      color: #2a5298;
+      margin-top: 20px;
+    }
+    h3, h4 {
+      color: #0077b5;
+    }
+    p, li {
+      font-size: 1rem;
+    }
+    ul, ol {
+      margin-left: 20px;
+    }
+    .code-block {
+      color: #2a5298;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      background: none;
+      border-left: 3px solid #2a5298;
+      padding-left: 10px;
+      margin: 10px 0;
+    }
+    .example-output {
+      color: #0077b5;
+      border-left: 4px solid #0077b5;
+      padding-left: 10px;
+    }
+    .takeaway {
+      color: #E64A19;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 30px;
+    }
+    footer {
+      text-align: center;
+      color: #555;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🕸️ Web Scraping for Beginners</h1>
+  
+
+  <h2>📌 1. What is Web Scraping?</h2>
+  <p>Web scraping is the process of extracting data from websites automatically, instead of copying it manually.</p>
+  <h3>👉 Example use cases:</h3>
+  <ul>
+    <li>Collecting product prices from e-commerce sites</li>
+    <li>Gathering job postings from LinkedIn/Indeed</li>
+    <li>Extracting news articles, reviews, or sports data</li>
+    <li>Building datasets for machine learning</li>
+  </ul>
+
+  <h2>⚡ 2. Ethical Considerations</h2>
+  <ul>
+    <li>Always check the website's robots.txt file.</li>
+    <li>Scrape only public data.</li>
+    <li>Respect rate limits → don't overload servers.</li>
+    <li>Use data responsibly.</li>
+  </ul>
+
+  <h2>🛠️ 3. Tools & Libraries for Web Scraping</h2>
+  <ul>
+    <li><strong>Python Requests</strong> → Send HTTP requests, get web pages</li>
+    <li><strong>BeautifulSoup (bs4)</strong> → Parse HTML, extract data</li>
+    <li><strong>lxml</strong> → Fast HTML/XML parser</li>
+    <li><strong>Selenium</strong> → Automate browsers (for dynamic content)</li>
+    <li><strong>Scrapy</strong> → Full web scraping framework</li>
+  </ul>
+
+  <h2>👨‍💻 4. Basic Workflow of Web Scraping</h2>
+  <ol>
+    <li><strong>Send Request</strong> → Get the webpage HTML</li>
+    <li><strong>Parse HTML</strong> → Use a parser to read elements</li>
+    <li><strong>Extract Data</strong> → Target specific tags, attributes</li>
+    <li><strong>Store Data</strong> → Save in CSV, Excel, or database</li>
+  </ol>
+
+  <h2>🔎 5. Getting Started with Requests + BeautifulSoup</h2>
+  <p>Install libraries:</p>
+  <div class="code-block">
+    # Install required libraries<br>
+    pip install requests beautifulsoup4
+  </div>
+
+  <p>Example: Scraping Quotes</p>
+  <div class="code-block">
+    import requests<br>
+    from bs4 import BeautifulSoup<br><br>
+    url = "http://quotes.toscrape.com/"<br>
+    response = requests.get(url)<br><br>
+    soup = BeautifulSoup(response.text, "html.parser")<br><br>
+    quotes = soup.find_all("span", class_="text")<br>
+    authors = soup.find_all("small", class_="author")<br><br>
+    for q, a in zip(quotes, authors):<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;print(f"{q.text} - {a.text}")
+  </div>
+
+  <div class="example-output">
+    ✅ Output: Extracts all quotes and their authors.
+  </div>
+
+  <h2>🎯 6. Extracting Specific Elements</h2>
+  <p>Find one element:</p>
+  <div class="code-block">
+    title = soup.find("title").text
+  </div>
+
+  <p>Find multiple elements:</p>
+  <div class="code-block">
+    links = soup.find_all("a")<br>
+    for link in links:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;print(link.get("href"))
+  </div>
+
+  <h2>🌐 7. Scraping Dynamic Content (with Selenium)</h2>
+  <p>Some websites load content using JavaScript. For those cases:</p>
+  <div class="code-block">
+    pip install selenium
+  </div>
+  <div class="code-block">
+    from selenium import webdriver<br><br>
+    driver = webdriver.Chrome()<br>
+    driver.get("https://example.com")<br><br>
+    html = driver.page_source<br>
+    soup = BeautifulSoup(html, "html.parser")
+  </div>
+
+  <h2>📊 8. Storing Scraped Data</h2>
+  <div class="code-block">
+    import csv<br><br>
+    with open("quotes.csv", "w", newline="", encoding="utf-8") as f:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;writer = csv.writer(f)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;writer.writerow(["Quote", "Author"])<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;for q, a in zip(quotes, authors):<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writer.writerow([q.text, a.text])
+  </div>
+
+  <div class="code-block">
+    import pandas as pd<br><br>
+    data = {"Quote": [q.text for q in quotes], "Author": [a.text for a in authors]}<br>
+    df = pd.DataFrame(data)<br>
+    df.to_csv("quotes.csv", index=False)
+  </div>
+
+  <h2>🚀 9. Beginner Project Ideas</h2>
+  <ul>
+    <li>📚 Book Data: Scrape top 100 books from Goodreads</li>
+    <li>💰 Price Tracking: Collect product prices (Amazon, Flipkart)</li>
+    <li>📰 News Headlines: Extract recent news headlines</li>
+    <li>💼 Job Listings: Create a dataset with job titles, companies, locations</li>
+  </ul>
+
+  <h2>📚 10. Next Steps</h2>
+  <ul>
+    <li>Learn regular expressions for text extraction.</li>
+    <li>Use APIs whenever possible.</li>
+    <li>Explore Scrapy for large-scale scraping.</li>
+    <li>Practice handling pagination & login-protected sites.</li>
+  </ul>
+
+  <div class="takeaway">
+    ✨ Web scraping is the foundation of the Data Science lifecycle. It helps collect raw data — the first step toward analysis and insights.
+  </div>
+
+  <footer>
+    Created for Educational Purposes – Complete Beginner's Guide to Data Science<br>
+    <strong>Data Science with Vamsi</strong><br>
+    © 2024 Data Science Education Guide
+  </footer>
+</body>
+</html>
