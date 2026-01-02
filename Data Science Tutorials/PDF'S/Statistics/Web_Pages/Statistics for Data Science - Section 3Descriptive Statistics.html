@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics for Data Science - Section 3: Descriptive Statistics</title>
+    <style>
+        /* PDF-OPTIMIZED STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+            color: #000000;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.5;
+            position: relative;
+            min-height: 100vh;
+            font-size: 12pt;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* PDF FRIENDLY FONTS */
+        h1, h2, h3, h4 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-weight: bold;
+            color: #000000;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* SIMPLE WATERMARKS FOR PDF */
+        .watermark {
+            position: fixed;
+            opacity: 0.1;
+            font-size: 80pt;
+            font-weight: bold;
+            color: #cccccc;
+            z-index: -9999;
+            pointer-events: none;
+            font-family: 'Georgia', serif;
+        }
+
+        .watermark-center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        /* PDF CONTAINER */
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+            background: #ffffff;
+        }
+
+        /* HEADER - SIMPLE FOR PDF */
+        .header {
+            background-color: #f0f0f0;
+            border: 2px solid #000000;
+            padding: 30pt;
+            text-align: center;
+            margin-bottom: 30pt;
+            page-break-before: always;
+            page-break-inside: avoid;
+        }
+
+        .header h1 {
+            font-size: 24pt;
+            margin-bottom: 10pt;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        .header p {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        /* SIMPLE GRID FOR PDF */
+        .content-section {
+            margin-bottom: 40pt;
+            page-break-inside: avoid;
+        }
+
+        /* CARDS - SIMPLE BORDERS FOR PDF */
+        .card {
+            background: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 5pt;
+            padding: 20pt;
+            margin-bottom: 20pt;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .card h2 {
+            font-size: 18pt;
+            margin-bottom: 15pt;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5pt;
+        }
+
+        .card h3 {
+            font-size: 14pt;
+            margin: 15pt 0 8pt 0;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        /* LISTS - SIMPLE FOR PDF */
+        ul, ol {
+            margin-left: 40pt;
+            margin-bottom: 15pt;
+        }
+
+        li {
+            margin-bottom: 6pt;
+            padding-left: 5pt;
+            line-height: 1.4;
+        }
+
+        /* DEFINITION BOXES - HIGH CONTRAST FOR PDF */
+        .definition-box {
+            background: #f8f8f8;
+            border-left: 4pt solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            border: 1px solid #cccccc;
+        }
+
+        /* EXAMPLE BOXES */
+        .example-box {
+            background: #ffffff;
+            border: 1px solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            font-style: italic;
+            background-color: #f9f9f9;
+        }
+
+        /* DECISION BOXES */
+        .decision-box {
+            background: #f0f0f0;
+            border: 2px solid #000000;
+            border-left: 6pt solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            font-weight: bold;
+        }
+
+        /* VISUALIZATION BOX */
+        .visualization-box {
+            background: #e8f4f8;
+            border: 2px solid #0066cc;
+            padding: 15pt;
+            margin: 15pt 0;
+            border-radius: 5pt;
+            text-align: center;
+        }
+
+        /* CODE BOX */
+        .code-box {
+            background: #2d2d2d;
+            color: #ffffff;
+            padding: 12pt;
+            margin: 12pt 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border-radius: 3pt;
+            white-space: pre-wrap;
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: #000000;
+            color: #ffffff !important;
+            text-align: center;
+            padding: 20pt;
+            margin-top: 40pt;
+            border: 2px solid #000000;
+            page-break-before: avoid;
+        }
+
+        .footer p, .footer div {
+            color: #ffffff !important;
+        }
+
+        .footer-watermark {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-top: 10pt;
+        }
+
+        /* PAGE BREAKS FOR PDF */
+        .page-break {
+            page-break-before: always;
+        }
+
+        .no-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* PRINT SPECIFIC STYLES */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: #ffffff;
+            }
+            
+            .container {
+                padding: 0.25in;
+                max-width: 100%;
+            }
+            
+            .watermark {
+                opacity: 0.05;
+            }
+            
+            .card {
+                border: 1px solid #000000;
+                box-shadow: none;
+            }
+            
+            /* Force background colors in print */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+
+        /* RESPONSIVE - SIMPLE */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 20pt;
+            }
+            
+            .header h1 {
+                font-size: 20pt;
+            }
+            
+            .card {
+                padding: 15pt;
+            }
+        }
+
+        /* SECTION TITLES */
+        .section-title {
+            background-color: #000000;
+            color: #ffffff !important;
+            padding: 15pt;
+            margin: 30pt 0 20pt 0;
+            text-align: center;
+            font-size: 20pt;
+            font-weight: bold;
+            page-break-before: always;
+        }
+
+        .section-title h2 {
+            color: #ffffff !important;
+            border: none;
+        }
+
+        /* BOLD TEXT FOR EMPHASIS */
+        strong {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        /* HORIZONTAL RULES */
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #000000;
+            margin: 20pt 0;
+        }
+
+        /* SIMPLE VISUAL DIAGRAMS */
+        .simple-visual {
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 15pt 0;
+            padding: 10pt;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+        }
+
+        /* COMPARISON TABLE */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15pt 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #000;
+            padding: 8pt;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background: #000;
+            color: white;
+        }
+
+        /* ENHANCED VISUALIZATION STYLES */
+        .enhanced-visual {
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20pt 0;
+            padding: 15pt;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8pt;
+            border: 2px solid #000000;
+            font-size: 11pt;
+            line-height: 1.3;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            background: white;
+            color: black;
+            padding: 15pt;
+            margin: 15pt 0;
+            border-radius: 5pt;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .axis {
+            display: flex;
+            justify-content: space-between;
+            margin: 5pt 0;
+            padding: 0 10pt;
+            font-weight: bold;
+        }
+        
+        .bar {
+            background: #4CAF50;
+            margin: 2pt 0;
+            padding: 3pt;
+            border-radius: 2pt;
+            text-align: right;
+            padding-right: 10pt;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .box-plot {
+            display: flex;
+            align-items: center;
+            height: 60pt;
+            background: #f8f9fa;
+            padding: 10pt;
+            border-radius: 5pt;
+            margin: 10pt 0;
+            position: relative;
+        }
+        
+        .box-whisker {
+            position: absolute;
+            height: 4pt;
+            background: #333;
+        }
+        
+        .box {
+            background: #2196F3;
+            height: 30pt;
+            position: absolute;
+            border-radius: 3pt;
+        }
+        
+        .median-line {
+            position: absolute;
+            height: 30pt;
+            width: 2pt;
+            background: #FF5722;
+        }
+        
+        .outlier {
+            position: absolute;
+            width: 8pt;
+            height: 8pt;
+            background: #FF0000;
+            border-radius: 50%;
+        }
+        
+        .line-chart {
+            position: relative;
+            height: 100pt;
+            background: #f8f9fa;
+            margin: 15pt 0;
+            padding: 10pt;
+            border-radius: 5pt;
+        }
+        
+        .data-point {
+            position: absolute;
+            width: 10pt;
+            height: 10pt;
+            background: #4CAF50;
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+        }
+        
+        .line {
+            position: absolute;
+            height: 2pt;
+            background: #2196F3;
+            transform-origin: left center;
+        }
+        
+        .pie-slice {
+            display: inline-block;
+            width: 60pt;
+            height: 60pt;
+            border-radius: 50%;
+            margin: 5pt;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pie-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10pt;
+            margin-top: 10pt;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 2pt;
+        }
+        
+        .legend-color {
+            width: 12pt;
+            height: 12pt;
+            margin-right: 5pt;
+            border-radius: 2pt;
+        }
+    </style>
+</head>
+<body>
+    <!-- Simple Watermarks for PDF -->
+    <div class="watermark watermark-center">Data Science with Vamsi</div>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>📊 STATISTICS FOR DATA SCIENCE</h1>
+            <p>Section 3: Descriptive Statistics - Understanding Your Data</p>
+        </header>
+
+        <!-- Dataset Introduction -->
+        <div class="content-section no-break">
+            <div class="card">
+                <h2>📚 Our Dataset: Student Exam Scores</h2>
+                
+                <div class="definition-box">
+                    <strong>Dataset Context:</strong> Final exam scores for 50 students in a Data Science class.
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+
+# Simple dataset: 20 student scores (sample from 50)
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+print(f"Student Scores: {scores}")
+print(f"Total students: {len(scores)}")
+print(f"Min score: {min(scores)}")
+print(f"Max score: {max(scores)}")
+                </div>
+                
+                <p><strong>Why this dataset:</strong> Simple, relatable, and shows all statistical concepts clearly.</p>
+            </div>
+        </div>
+
+        <!-- Section 3.1: Measures of Central Tendency -->
+        <div class="section-title">
+            <h2>3.1 Measures of Central Tendency</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <h3>📍 Mean (Average)</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Sum of all values divided by number of values.
+                    <br><strong>Formula:</strong> Mean = Σx ÷ n
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> Scores: 65, 72, 68, 74, 85
+                    <br>Sum = 65 + 72 + 68 + 74 + 85 = 364
+                    <br>Number of values = 5
+                    <br>Mean = 364 ÷ 5 = 72.8
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Mean Visualization</h4>
+                    <div class="simple-visual">
+                        Scores: 65, 72, 68, 74, 85
+                        <br>│    │    │    │    │
+                        <br>▼    ▼    ▼    ▼    ▼
+                        <br>┌────┬────┬────┬────┬────┐
+                        <br>│ 65 │ 72 │ 68 │ 74 │ 85 │
+                        <br>└────┴────┴────┴────┴────┘
+                        <br>        Add all → 364
+                        <br>        Divide by 5 → 72.8
+                        <br>        ↓
+                        <br>       MEAN = 72.8
+                    </div>
+                    <p><strong>Visual:</strong> All scores combine and average to a center point.</p>
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Simple mean calculation
+mean_score = np.mean(scores)
+print(f"Mean score: {mean_score}")
+print(f"Calculation: Sum({sum(scores)}) / {len(scores)} = {mean_score}")
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Median</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Middle value when data is sorted.
+                </div>
+                
+                <div class="decision-box">
+                    <h4>🤔 Why Both Mean and Median?</h4>
+                    <p><strong>Mean:</strong> Affected by outliers. One billionaire increases average income.</p>
+                    <p><strong>Median:</strong> Not affected by outliers. Shows typical value.</p>
+                    <p><strong>Example:</strong> Salaries: [30k, 35k, 40k, 45k, 1M]</p>
+                    <p>Mean = 230k (misleading), Median = 40k (accurate)</p>
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> Scores: 45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+                    75, 76, 77, 78, 80, 82, 85, 88, 90, 95
+                    <br>Even number (20 scores) → Average of 10th & 11th values
+                    <br>10th value = 73, 11th value = 75
+                    <br>Median = (73 + 75) ÷ 2 = 74
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Median Visualization</h4>
+                    <div class="simple-visual">
+                        Sorted Scores (20 students):
+                        <br>45 55 58 60 62 65 68 70 72 73 │ 75 76 77 78 80 82 85 88 90 95
+                        <br>                            ↑
+                        <br>                         MIDDLE
+                        <br>                  (between 73 and 75)
+                        <br>
+                        <br>Median = (73 + 75) ÷ 2 = 74
+                        <br>
+                        <br>50% below │ 50% above
+                        <br>10 students │ 10 students
+                    </div>
+                    <p><strong>Visual:</strong> Line divided equally in middle.</p>
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Simple median calculation
+median_score = np.median(scores)
+print(f"Median score: {median_score}")
+
+# Show sorted scores
+sorted_scores = sorted(scores)
+print(f"\nSorted scores: {sorted_scores}")
+print(f"Middle positions: {sorted_scores[9]} and {sorted_scores[10]}")
+print(f"Median = ({sorted_scores[9]} + {sorted_scores[10]}) / 2 = {median_score}")
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🏆 Mode</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Most frequent value in dataset.
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> Scores: 75, 76, 77, 75, 78, 75, 80
+                    <br>75 appears 3 times (most frequent)
+                    <br>Mode = 75
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Mode Visualization</h4>
+                    <div class="simple-visual">
+                        Score : Frequency
+                        <br>75   : ████████ (3 times)
+                        <br>76   : ███ (1 time)
+                        <br>77   : ███ (1 time)
+                        <br>78   : ███ (1 time)
+                        <br>80   : ███ (1 time)
+                        <br>
+                        <br>Tallest bar → MODE = 75
+                    </div>
+                    <p><strong>Visual:</strong> Highest frequency bar.</p>
+                </div>
+                
+                <div class="code-box">
+from collections import Counter
+
+scores = [75, 76, 77, 75, 78, 75, 80, 82, 75, 76]
+
+# Simple mode calculation
+score_counts = Counter(scores)
+print("Score frequencies:")
+for score, count in score_counts.items():
+    print(f"  Score {score}: {count} times")
+
+# Find mode
+mode_score = max(score_counts, key=score_counts.get)
+mode_count = score_counts[mode_score]
+
+print(f"\nMode: {mode_score} (appears {mode_count} times)")
+print(f"This is the most common score")
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3.2: Measures of Dispersion -->
+        <div class="section-title page-break">
+            <h2>3.2 Measures of Dispersion (Spread)</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <h3>📏 Range</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Difference between highest and lowest values.
+                    <br><strong>Formula:</strong> Range = Max - Min
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> Scores: 45, 55, 58, 60, 95
+                    <br>Max = 95, Min = 45
+                    <br>Range = 95 - 45 = 50
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Range Visualization</h4>
+                    <div class="simple-visual">
+                        0──────25──────50──────75──────100
+                        <br>│           │           │           │
+                        <br>▼           │           │           ▼
+                        <br>45          │           │          95
+                        <br>├───────────────────────────────┤
+                        <br>            RANGE = 50
+                        <br>
+                        <br>Min=45           Max=95
+                    </div>
+                    <p><strong>Visual:</strong> Distance from leftmost to rightmost point.</p>
+                </div>
+                
+                <div class="code-box">
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Simple range calculation
+score_range = max(scores) - min(scores)
+print(f"Minimum score: {min(scores)}")
+print(f"Maximum score: {max(scores)}")
+print(f"Range: {max(scores)} - {min(scores)} = {score_range}")
+print(f"\nInterpretation: Scores span {score_range} points")
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Variance</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Average of squared differences from mean.
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> Scores: 70, 80, 90
+                    <br>Mean = 80
+                    <br>Differences: -10, 0, +10
+                    <br>Squared: 100, 0, 100
+                    <br>Average: (100+0+100)÷3 = 66.67
+                    <br>Variance = 66.67
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Variance Visualization</h4>
+                    <div class="simple-visual">
+                        Mean = 80
+                        <br>
+                        <br>Score: 70   80   90
+                        <br>Diff:  -10    0   +10
+                        <br>Square: 100   0   100
+                        <br>
+                        <br>Average squares = (100+0+100)/3 = 66.67
+                        <br>
+                        <br>VARIANCE = 66.67
+                    </div>
+                    <p><strong>Visual:</strong> Squares show spread from center.</p>
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+
+scores = [70, 80, 90]
+
+# Simple variance calculation
+mean_score = np.mean(scores)
+print(f"Mean: {mean_score}")
+
+# Calculate squared differences
+squared_diffs = [(x - mean_score) ** 2 for x in scores]
+print(f"\nSquared differences from mean:")
+for i, (score, sq_diff) in enumerate(zip(scores, squared_diffs)):
+    diff = score - mean_score
+    print(f"  Score {score}: ({score} - {mean_score})² = ({diff})² = {sq_diff}")
+
+# Calculate variance
+variance = sum(squared_diffs) / len(scores)
+print(f"\nVariance = Sum of squares / n")
+print(f"         = {sum(squared_diffs)} / {len(scores)}")
+print(f"         = {variance}")
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Standard Deviation</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Square root of variance.
+                    <br><strong>Formula:</strong> SD = √Variance
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> Variance = 225
+                    <br>Standard Deviation = √225 = 15
+                    <br>Interpretation: Scores typically vary by 15 points from mean
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Standard Deviation Visualization</h4>
+                    <div class="simple-visual">
+                        Mean = 75
+                        <br>SD = 10
+                        <br>
+                        <br>55────65────75────85────95
+                        <br>│     │     │     │     │
+                        <br>-2SD  -1SD  Mean +1SD  +2SD
+                        <br>
+                        <br>68% within 1 SD (65 to 85)
+                        <br>95% within 2 SD (55 to 95)
+                    </div>
+                    <p><strong>Visual:</strong> Bell curve with standard deviation bands.</p>
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+import math
+
+scores = [70, 80, 90]
+
+# Calculate standard deviation
+mean_score = np.mean(scores)
+variance = np.var(scores)
+std_dev = np.std(scores)
+
+print(f"Mean: {mean_score}")
+print(f"Variance: {variance}")
+print(f"Standard Deviation: √{variance} = {std_dev}")
+print(f"\nInterpretation:")
+print(f"Scores typically vary by {std_dev:.1f} points from the mean")
+print(f"\nNormal distribution rule:")
+print(f"68% within {mean_score-std_dev:.1f} to {mean_score+std_dev:.1f}")
+print(f"95% within {mean_score-2*std_dev:.1f} to {mean_score+2*std_dev:.1f}")
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📦 Interquartile Range (IQR)</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Range of middle 50% of data.
+                    <br><strong>Formula:</strong> IQR = Q3 - Q1
+                </div>
+                
+                <div class="example-box">
+                    <strong>Example:</strong> 20 scores sorted
+                    <br>Q1 (25th percentile) = 65
+                    <br>Q3 (75th percentile) = 82
+                    <br>IQR = 82 - 65 = 17
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 IQR Visualization</h4>
+                    <div class="simple-visual">
+                        Scores sorted:
+                        <br>45 55 58 60 62 │ 65 68 70 72 73 75 76 77 78 80 │ 82 85 88 90 95
+                        <br>     Lowest 25%      Middle 50% (IQR)       Highest 25%
+                        <br>                Q1=65            Q3=82
+                        <br>                ├─────────────────┤
+                        <br>                     IQR = 17
+                    </div>
+                    <p><strong>Visual:</strong> Middle section of sorted data.</p>
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Calculate IQR
+q1 = np.percentile(scores, 25)
+q3 = np.percentile(scores, 75)
+iqr = q3 - q1
+
+print(f"Q1 (25th percentile): {q1}")
+print(f"Q3 (75th percentile): {q3}")
+print(f"IQR: {q3} - {q1} = {iqr}")
+print(f"\nInterpretation:")
+print(f"Middle 50% of students scored between {q1} and {q3}")
+print(f"This range of {iqr} points contains typical scores")
+
+# Find outliers
+lower_bound = q1 - 1.5 * iqr
+upper_bound = q3 + 1.5 * iqr
+outliers = [s for s in scores if s < lower_bound or s > upper_bound]
+
+print(f"\nOutlier bounds: {lower_bound:.1f} to {upper_bound:.1f}")
+print(f"Outliers: {outliers}")
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3.3: Measures of Shape -->
+        <div class="section-title">
+            <h2>3.3 Measures of Shape</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <h3>🔄 Skewness</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Measures asymmetry of distribution.
+                </div>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Type</th>
+                        <th>Skewness</th>
+                        <th>Mean vs Median</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>Symmetric</td>
+                        <td>≈ 0</td>
+                        <td>Mean = Median</td>
+                        <td>Normal test scores</td>
+                    </tr>
+                    <tr>
+                        <td>Right-skewed</td>
+                        <td>> 0</td>
+                        <td>Mean > Median</td>
+                        <td>Income (few rich people)</td>
+                    </tr>
+                    <tr>
+                        <td>Left-skewed</td>
+                        <td>< 0</td>
+                        <td>Mean < Median</td>
+                        <td>Exam (most score high)</td>
+                    </tr>
+                </table>
+                
+                <div class="visualization-box">
+                    <h4>📊 Skewness Visualization</h4>
+                    <div class="simple-visual">
+                        Left Skew        Symmetric        Right Skew
+                        <br>    █               █               █
+                        <br>   ███             ███             ███
+                        <br>  █████           █████           █████
+                        <br> ███████         ███████         ███████
+                        <br>█████████       █████████       █████████
+                        <br>← Tail          Balanced         Tail →
+                        <br>Mean < Median   Mean = Median   Mean > Median
+                    </div>
+                </div>
+                
+                <div class="code-box">
+from scipy.stats import skew
+import numpy as np
+
+# Different distributions
+symmetric = [65, 70, 72, 75, 78, 80, 82]
+right_skewed = [50, 60, 65, 70, 75, 85, 95]
+left_skewed = [85, 88, 90, 92, 95, 98, 100]
+
+print("Skewness Examples:")
+print(f"Symmetric data: {skew(symmetric):.2f}")
+print(f"Right-skewed: {skew(right_skewed):.2f}")
+print(f"Left-skewed: {skew(left_skewed):.2f}")
+
+print(f"\nOur student scores:")
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+print(f"Skewness: {skew(scores):.2f}")
+print(f"Mean: {np.mean(scores):.1f}, Median: {np.median(scores)}")
+print("Slightly right-skewed (positive value)")
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📉 Kurtosis</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Measures "peakedness" and tail heaviness.
+                </div>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Type</th>
+                        <th>Kurtosis</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>Mesokurtic</td>
+                        <td>≈ 3</td>
+                        <td>Normal peaks & tails</td>
+                        <td>Standard tests</td>
+                    </tr>
+                    <tr>
+                        <td>Leptokurtic</td>
+                        <td>> 3</td>
+                        <td>Sharp peak, heavy tails</td>
+                        <td>Stock returns</td>
+                    </tr>
+                    <tr>
+                        <td>Platykurtic</td>
+                        <td>< 3</td>
+                        <td>Flat peak, light tails</td>
+                        <td>Uniform distribution</td>
+                    </tr>
+                </table>
+                
+                <div class="visualization-box">
+                    <h4>📊 Kurtosis Visualization</h4>
+                    <div class="simple-visual">
+                        Platykurtic      Mesokurtic      Leptokurtic
+                        <br>   ███              █               █
+                        <br>  █████            ███             ███
+                        <br> ███████          █████           █████
+                        <br>█████████        ███████         ███████
+                        <br>Flat peak      Normal peak     Sharp peak
+                        <br>Light tails    Normal tails    Heavy tails
+                        <br>Kurtosis < 3   Kurtosis ≈ 3    Kurtosis > 3
+                    </div>
+                </div>
+                
+                <div class="code-box">
+from scipy.stats import kurtosis
+import numpy as np
+
+# Different distributions
+normal_data = np.random.normal(0, 1, 1000)  # Normal distribution
+uniform_data = np.random.uniform(-3, 3, 1000)  # Uniform distribution
+
+print("Kurtosis Examples:")
+print(f"Normal distribution: {kurtosis(normal_data, fisher=False):.2f}")
+print(f"Uniform distribution: {kurtosis(uniform_data, fisher=False):.2f}")
+
+print(f"\nOur student scores:")
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+kurt = kurtosis(scores, fisher=False)
+print(f"Kurtosis: {kurt:.2f}")
+
+if kurt > 3.5:
+    print("Leptokurtic: Sharp peak, heavy tails")
+elif kurt < 2.5:
+    print("Platykurtic: Flat peak, light tails")
+else:
+    print("Mesokurtic: Normal distribution")
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3.4: Percentiles and Quartiles -->
+        <div class="section-title">
+            <h2>3.4 Percentiles and Quartiles</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="definition-box">
+                    <strong>Percentile:</strong> Value below which a percentage of data falls.
+                    <br><strong>Quartiles:</strong> Special percentiles dividing data into 4 equal parts.
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Percentiles Visualization</h4>
+                    <div class="simple-visual">
+                        0%────25%────50%────75%────100%
+                        <br>│      │      │      │      │
+                        <br>Min    Q1    Median  Q3    Max
+                        <br>45     65      74     82     95
+                        <br>
+                        <br>Quartiles divide data into 4 equal groups:
+                        <br>Group 1: 45-65 (lowest 25%)
+                        <br>Group 2: 65-74 (next 25%)
+                        <br>Group 3: 74-82 (next 25%)
+                        <br>Group 4: 82-95 (highest 25%)
+                    </div>
+                </div>
+                
+                <div class="code-box">
+import numpy as np
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Calculate percentiles
+percentiles = [10, 25, 50, 75, 90, 95]
+values = np.percentile(scores, percentiles)
+
+print("=== PERCENTILE ANALYSIS ===")
+for p, v in zip(percentiles, values):
+    print(f"{p}th percentile: {v:.1f}")
+
+print(f"\n=== QUARTILES ===")
+print(f"Q1 (25th): {np.percentile(scores, 25):.1f}")
+print(f"Q2 (50th, Median): {np.percentile(scores, 50):.1f}")
+print(f"Q3 (75th): {np.percentile(scores, 75):.1f}")
+
+print(f"\n=== INTERPRETATION ===")
+print(f"If you score {np.percentile(scores, 90):.0f}, you're in top 10%")
+print(f"If you score {np.percentile(scores, 75):.0f}, you're in top 25%")
+print(f"Middle 50% scored between {np.percentile(scores, 25):.0f} and {np.percentile(scores, 75):.0f}")
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3.5: Frequency Distribution -->
+        <div class="section-title">
+            <h2>3.5 Frequency Distribution</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="definition-box">
+                    <strong>Definition:</strong> Shows how often each value or range occurs.
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 Frequency Table</h4>
+                    <table class="comparison-table">
+                        <tr><th>Score Range</th><th>Frequency</th><th>Percentage</th></tr>
+                        <tr><td>40-49</td><td>1</td><td>5%</td></tr>
+                        <tr><td>50-59</td><td>2</td><td>10%</td></tr>
+                        <tr><td>60-69</td><td>4</td><td>20%</td></tr>
+                        <tr><td>70-79</td><td>8</td><td>40%</td></tr>
+                        <tr><td>80-89</td><td>3</td><td>15%</td></tr>
+                        <tr><td>90-100</td><td>2</td><td>10%</td></tr>
+                        <tr><th>Total</th><th>20</th><th>100%</th></tr>
+                    </table>
+                    <p><strong>Visual:</strong> Table showing counts in each range.</p>
+                </div>
+                
+                <div class="code-box">
+import pandas as pd
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Create frequency distribution
+df = pd.DataFrame({'Score': scores})
+
+# Create bins
+bins = [40, 50, 60, 70, 80, 90, 101]
+labels = ['40-49', '50-59', '60-69', '70-79', '80-89', '90-100']
+
+df['Range'] = pd.cut(df['Score'], bins=bins, labels=labels, right=False)
+freq_dist = df['Range'].value_counts().sort_index()
+
+print("=== FREQUENCY DISTRIBUTION ===")
+print("Range   | Frequency | Percentage")
+print("-" * 35)
+
+total = len(scores)
+for r in labels:
+    freq = freq_dist.get(r, 0)
+    pct = (freq / total) * 100
+    print(f"{r:7} | {freq:9} | {pct:8.1f}%")
+
+print("-" * 35)
+print(f"{'Total':7} | {total:9} | {100:8.1f}%")
+
+print(f"\n=== INSIGHTS ===")
+most_common = freq_dist.idxmax()
+most_count = freq_dist.max()
+print(f"Most common range: {most_common} ({most_count} students)")
+print(f"This contains {most_count/total*100:.1f}% of students")
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3.6: Data Visualization Concepts - ENHANCED -->
+        <div class="section-title page-break">
+            <h2>3.6 Data Visualization Concepts</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <h3>📊 Histogram</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Bar graph showing frequency distribution of continuous data.
+                </div>
+                
+                <div class="enhanced-visual">
+                    <h4>📊 ENHANCED HISTOGRAM VISUALIZATION</h4>
+                    <div class="chart-container">
+                        <div style="text-align: center; margin-bottom: 10pt; font-weight: bold;">
+                            Student Score Distribution
+                        </div>
+                        
+                        <!-- Y-axis labels -->
+                        <div style="display: flex;">
+                            <div style="width: 30pt; text-align: right; padding-right: 5pt;">
+                                <div style="height: 20pt;">8</div>
+                                <div style="height: 20pt;">7</div>
+                                <div style="height: 20pt;">6</div>
+                                <div style="height: 20pt;">5</div>
+                                <div style="height: 20pt;">4</div>
+                                <div style="height: 20pt;">3</div>
+                                <div style="height: 20pt;">2</div>
+                                <div style="height: 20pt;">1</div>
+                                <div style="height: 20pt;">0</div>
+                            </div>
+                            
+                            <!-- Bars -->
+                            <div style="flex: 1; position: relative; border-left: 2px solid #333; border-bottom: 2px solid #333;">
+                                <!-- Grid lines -->
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 20pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 40pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 60pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 80pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 100pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 120pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 140pt;"></div>
+                                <div style="position: absolute; width: 100%; height: 1px; background: #ddd; top: 160pt;"></div>
+                                
+                                <!-- Bars -->
+                                <div style="position: absolute; left: 5%; width: 15%; bottom: 0; height: 20pt; background: #4CAF50; border: 1px solid #388E3C;">
+                                    <div style="position: absolute; top: -20pt; width: 100%; text-align: center; font-size: 9pt;">1</div>
+                                </div>
+                                <div style="position: absolute; left: 20%; width: 15%; bottom: 0; height: 40pt; background: #4CAF50; border: 1px solid #388E3C;">
+                                    <div style="position: absolute; top: -20pt; width: 100%; text-align: center; font-size: 9pt;">2</div>
+                                </div>
+                                <div style="position: absolute; left: 35%; width: 15%; bottom: 0; height: 80pt; background: #4CAF50; border: 1px solid #388E3C;">
+                                    <div style="position: absolute; top: -20pt; width: 100%; text-align: center; font-size: 9pt;">4</div>
+                                </div>
+                                <div style="position: absolute; left: 50%; width: 15%; bottom: 0; height: 160pt; background: #2196F3; border: 1px solid #1976D2;">
+                                    <div style="position: absolute; top: -20pt; width: 100%; text-align: center; font-size: 9pt;">8</div>
+                                </div>
+                                <div style="position: absolute; left: 65%; width: 15%; bottom: 0; height: 60pt; background: #4CAF50; border: 1px solid #388E3C;">
+                                    <div style="position: absolute; top: -20pt; width: 100%; text-align: center; font-size: 9pt;">3</div>
+                                </div>
+                                <div style="position: absolute; left: 80%; width: 15%; bottom: 0; height: 40pt; background: #4CAF50; border: 1px solid #388E3C;">
+                                    <div style="position: absolute; top: -20pt; width: 100%; text-align: center; font-size: 9pt;">2</div>
+                                </div>
+                                
+                                <!-- Mean and Median lines -->
+                                <div style="position: absolute; left: 55%; top: 0; bottom: 0; width: 2px; background: #FF5722; border-left: 2px dashed #FF5722;">
+                                    <div style="position: absolute; top: -25pt; left: -15pt; background: white; padding: 2pt; border-radius: 2pt; font-size: 9pt;">Mean</div>
+                                </div>
+                                <div style="position: absolute; left: 58%; top: 0; bottom: 0; width: 2px; background: #9C27B0; border-left: 2px dotted #9C27B0;">
+                                    <div style="position: absolute; top: -25pt; left: -20pt; background: white; padding: 2pt; border-radius: 2pt; font-size: 9pt;">Median</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- X-axis labels -->
+                        <div style="display: flex; margin-left: 30pt; margin-top: 5pt;">
+                            <div style="width: 15%; text-align: center; font-size: 9pt;">40-49</div>
+                            <div style="width: 15%; text-align: center; font-size: 9pt;">50-59</div>
+                            <div style="width: 15%; text-align: center; font-size: 9pt;">60-69</div>
+                            <div style="width: 15%; text-align: center; font-size: 9pt;">70-79</div>
+                            <div style="width: 15%; text-align: center; font-size: 9pt;">80-89</div>
+                            <div style="width: 15%; text-align: center; font-size: 9pt;">90-100</div>
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div style="display: flex; justify-content: center; margin-top: 10pt; gap: 15pt;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 15pt; height: 15pt; background: #4CAF50; margin-right: 5pt; border: 1px solid #388E3C;"></div>
+                                <span style="font-size: 9pt;">Frequency Bars</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 15pt; height: 15pt; background: #2196F3; margin-right: 5pt; border: 1px solid #1976D2;"></div>
+                                <span style="font-size: 9pt;">Highest Frequency</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Interpretation:</strong> Shows distribution shape, central tendency, and spread at a glance.</p>
+                </div>
+                
+                <div class="code-box">
+import matplotlib.pyplot as plt
+import numpy as np
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Create enhanced histogram
+plt.figure(figsize=(10, 6))
+n, bins, patches = plt.hist(scores, bins=6, edgecolor='black', 
+                            color='skyblue', alpha=0.7)
+
+# Color the highest bar differently
+max_freq_index = np.argmax(n)
+patches[max_freq_index].set_facecolor('#2196F3')
+patches[max_freq_index].set_edgecolor('#1976D2')
+patches[max_freq_index].set_linewidth(2)
+
+# Add mean and median lines
+mean_score = np.mean(scores)
+median_score = np.median(scores)
+plt.axvline(mean_score, color='#FF5722', linestyle='--', 
+            linewidth=2, label=f'Mean = {mean_score:.1f}')
+plt.axvline(median_score, color='#9C27B0', linestyle=':', 
+            linewidth=2, label=f'Median = {median_score}')
+
+plt.xlabel('Exam Scores', fontsize=12)
+plt.ylabel('Number of Students', fontsize=12)
+plt.title('Enhanced Histogram: Score Distribution with Mean & Median', 
+          fontsize=14, fontweight='bold')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Add value labels on bars
+for i, (patch, count) in enumerate(zip(patches, n)):
+    plt.text(patch.get_x() + patch.get_width()/2, count + 0.1,
+             f'{int(count)}', ha='center', va='bottom', fontsize=10)
+
+plt.tight_layout()
+plt.show()
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📦 Box Plot (Box-and-Whisker Plot)</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Visualizes distribution using quartiles, median, and outliers.
+                </div>
+                
+                <div class="enhanced-visual">
+                    <h4>📦 ENHANCED BOX PLOT VISUALIZATION</h4>
+                    <div class="chart-container">
+                        <div style="text-align: center; margin-bottom: 10pt; font-weight: bold;">
+                            Box Plot: Student Exam Scores
+                        </div>
+                        
+                        <div class="box-plot">
+                            <!-- Scale -->
+                            <div style="position: absolute; left: 0; right: 0; top: -20pt; display: flex; justify-content: space-between; padding: 0 10pt;">
+                                <div style="font-size: 9pt;">40</div>
+                                <div style="font-size: 9pt;">50</div>
+                                <div style="font-size: 9pt;">60</div>
+                                <div style="font-size: 9pt;">70</div>
+                                <div style="font-size: 9pt;">80</div>
+                                <div style="font-size: 9pt;">90</div>
+                                <div style="font-size: 9pt;">100</div>
+                            </div>
+                            
+                            <!-- Score line -->
+                            <div style="position: absolute; left: 10pt; right: 10pt; top: 50%; height: 2px; background: #333;"></div>
+                            
+                            <!-- Outliers -->
+                            <div class="outlier" style="left: 8%;"></div>
+                            <div class="outlier" style="left: 12%;"></div>
+                            <div class="outlier" style="left: 92%;"></div>
+                            
+                            <!-- Lower whisker -->
+                            <div class="box-whisker" style="left: 20%; width: 15%; top: 50%;"></div>
+                            
+                            <!-- Box (Q1 to Q3) -->
+                            <div class="box" style="left: 35%; width: 30%; top: 35%;">
+                                <div style="position: absolute; top: -20pt; left: 0; right: 0; text-align: center; font-size: 9pt; color: white;">
+                                    IQR = 17
+                                </div>
+                            </div>
+                            
+                            <!-- Median line -->
+                            <div class="median-line" style="left: 48%; top: 35%;"></div>
+                            
+                            <!-- Upper whisker -->
+                            <div class="box-whisker" style="left: 65%; width: 25%; top: 50%;"></div>
+                            
+                            <!-- Labels -->
+                            <div style="position: absolute; left: 20%; top: 70%; font-size: 9pt; background: white; padding: 2pt;">Min=45</div>
+                            <div style="position: absolute; left: 35%; top: 70%; font-size: 9pt; background: white; padding: 2pt;">Q1=65</div>
+                            <div style="position: absolute; left: 48%; top: 10%; font-size: 9pt; background: white; padding: 2pt;">Median=74</div>
+                            <div style="position: absolute; left: 65%; top: 70%; font-size: 9pt; background: white; padding: 2pt;">Q3=82</div>
+                            <div style="position: absolute; left: 90%; top: 70%; font-size: 9pt; background: white; padding: 2pt;">Max=95</div>
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15pt; margin-top: 15pt;">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #2196F3;"></div>
+                                <span style="font-size: 9pt;">Box (IQR: 65-82)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #FF5722;"></div>
+                                <span style="font-size: 9pt;">Median (74)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #333;"></div>
+                                <span style="font-size: 9pt;">Whiskers</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #FF0000; border-radius: 50%;"></div>
+                                <span style="font-size: 9pt;">Outliers</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Interpretation:</strong> Shows quartiles, median, range, and outliers in one view.</p>
+                </div>
+                
+                <div class="code-box">
+import matplotlib.pyplot as plt
+import numpy as np
+
+scores = [45, 55, 58, 60, 62, 65, 68, 70, 72, 73, 
+          75, 76, 77, 78, 80, 82, 85, 88, 90, 95]
+
+# Create enhanced box plot
+plt.figure(figsize=(10, 8))
+
+# Create box plot with custom styling
+box = plt.boxplot(scores, vert=True, patch_artist=True,
+                  boxprops=dict(facecolor='#2196F3', alpha=0.8, linewidth=2),
+                  medianprops=dict(color='#FF5722', linewidth=3),
+                  whiskerprops=dict(color='#333', linewidth=2),
+                  capprops=dict(color='#333', linewidth=2),
+                  flierprops=dict(marker='o', color='#FF0000', 
+                                  markersize=10, alpha=0.7))
+
+# Add individual data points
+for i, score in enumerate(scores):
+    plt.plot(1 + np.random.normal(0, 0.05), score, 'o', 
+             color='gray', alpha=0.5, markersize=6)
+
+# Add annotations
+q1 = np.percentile(scores, 25)
+median = np.median(scores)
+q3 = np.percentile(scores, 75)
+iqr = q3 - q1
+
+plt.text(1.15, q1, f'Q1 = {q1}', fontsize=11,
+         bbox=dict(facecolor='white', alpha=0.9))
+plt.text(1.15, median, f'Median = {median}', fontsize=11,
+         bbox=dict(facecolor='white', alpha=0.9))
+plt.text(1.15, q3, f'Q3 = {q3}', fontsize=11,
+         bbox=dict(facecolor='white', alpha=0.9))
+plt.text(1.3, (q1+q3)/2, f'IQR = {iqr}', fontsize=12, fontweight='bold',
+         bbox=dict(facecolor='#E3F2FD', alpha=0.9))
+
+plt.ylabel('Exam Scores', fontsize=12)
+plt.title('Enhanced Box Plot with Individual Data Points', 
+          fontsize=14, fontweight='bold')
+plt.grid(True, alpha=0.3, axis='y')
+
+# Remove x-ticks
+plt.xticks([])
+
+plt.tight_layout()
+plt.show()
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Line Chart</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Shows trends over time with connected points.
+                </div>
+                
+                <div class="enhanced-visual">
+                    <h4>📈 ENHANCED LINE CHART VISUALIZATION</h4>
+                    <div class="chart-container">
+                        <div style="text-align: center; margin-bottom: 10pt; font-weight: bold;">
+                            Student Performance Over 5 Tests
+                        </div>
+                        
+                        <div class="line-chart">
+                            <!-- Y-axis -->
+                            <div style="position: absolute; left: 30pt; top: 0; bottom: 20pt; width: 2px; background: #333;"></div>
+                            <div style="position: absolute; left: 0; width: 30pt; text-align: right; padding-right: 5pt;">
+                                <div style="height: 20pt;">100</div>
+                                <div style="height: 20pt;">90</div>
+                                <div style="height: 20pt;">80</div>
+                                <div style="height: 20pt;">70</div>
+                                <div style="height: 20pt;">60</div>
+                            </div>
+                            
+                            <!-- X-axis -->
+                            <div style="position: absolute; left: 30pt; right: 0; bottom: 20pt; height: 2px; background: #333;"></div>
+                            <div style="position: absolute; left: 30pt; right: 0; bottom: 0; display: flex; justify-content: space-around;">
+                                <div style="font-size: 9pt;">Test 1</div>
+                                <div style="font-size: 9pt;">Test 2</div>
+                                <div style="font-size: 9pt;">Test 3</div>
+                                <div style="font-size: 9pt;">Test 4</div>
+                                <div style="font-size: 9pt;">Test 5</div>
+                            </div>
+                            
+                            <!-- Grid lines -->
+                            <div style="position: absolute; left: 30pt; right: 0; top: 0; bottom: 20pt;">
+                                <div style="position: absolute; left: 0; right: 0; height: 1px; background: #eee; top: 20pt;"></div>
+                                <div style="position: absolute; left: 0; right: 0; height: 1px; background: #eee; top: 40pt;"></div>
+                                <div style="position: absolute; left: 0; right: 0; height: 1px; background: #eee; top: 60pt;"></div>
+                                <div style="position: absolute; left: 0; right: 0; height: 1px; background: #eee; top: 80pt;"></div>
+                            </div>
+                            
+                            <!-- Student A Line -->
+                            <div class="line" style="left: 15%; top: 70%; width: 70%; transform: rotate(-15deg);"></div>
+                            <div class="data-point" style="left: 15%; top: 70%; background: #4CAF50;"></div>
+                            <div class="data-point" style="left: 30%; top: 60%; background: #4CAF50;"></div>
+                            <div class="data-point" style="left: 45%; top: 50%; background: #4CAF50;"></div>
+                            <div class="data-point" style="left: 60%; top: 40%; background: #4CAF50;"></div>
+                            <div class="data-point" style="left: 75%; top: 30%; background: #4CAF50;"></div>
+                            
+                            <!-- Student B Line -->
+                            <div class="line" style="left: 15%; top: 30%; width: 70%; transform: rotate(5deg); background: #9C27B0;"></div>
+                            <div class="data-point" style="left: 15%; top: 30%; background: #9C27B0;"></div>
+                            <div class="data-point" style="left: 30%; top: 35%; background: #9C27B0;"></div>
+                            <div class="data-point" style="left: 45%; top: 40%; background: #9C27B0;"></div>
+                            <div class="data-point" style="left: 60%; top: 35%; background: #9C27B0;"></div>
+                            <div class="data-point" style="left: 75%; top: 30%; background: #9C27B0;"></div>
+                            
+                            <!-- Class Average Line -->
+                            <div class="line" style="left: 15%; top: 50%; width: 70%; transform: rotate(-5deg); background: #FF9800; height: 3px;"></div>
+                            <div class="data-point" style="left: 15%; top: 50%; background: #FF9800; width: 12px; height: 12px;"></div>
+                            <div class="data-point" style="left: 30%; top: 45%; background: #FF9800; width: 12px; height: 12px;"></div>
+                            <div class="data-point" style="left: 45%; top: 40%; background: #FF9800; width: 12px; height: 12px;"></div>
+                            <div class="data-point" style="left: 60%; top: 35%; background: #FF9800; width: 12px; height: 12px;"></div>
+                            <div class="data-point" style="left: 75%; top: 30%; background: #FF9800; width: 12px; height: 12px;"></div>
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div style="display: flex; justify-content: center; gap: 20pt; margin-top: 15pt;">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #4CAF50;"></div>
+                                <span style="font-size: 9pt;">Student A (Improving)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #9C27B0;"></div>
+                                <span style="font-size: 9pt;">Student B (Consistent)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #FF9800;"></div>
+                                <span style="font-size: 9pt;">Class Average</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Trend annotation -->
+                        <div style="text-align: center; margin-top: 10pt; padding: 8pt; background: #E3F2FD; border-radius: 4pt;">
+                            <strong>Trend Analysis:</strong> Student A shows steady improvement, 
+                            while Student B remains consistent around 80-85
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-box">
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Test scores over time
+tests = ['Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5']
+student_a = [65, 70, 75, 78, 82]    # Improving student
+student_b = [82, 80, 78, 79, 81]    # Consistent student
+class_avg = [72, 74, 76, 78, 80]    # Class average
+
+# Create enhanced line chart
+plt.figure(figsize=(12, 7))
+
+# Plot lines with different styles
+line_a, = plt.plot(tests, student_a, 'o-', color='#4CAF50', 
+                   linewidth=3, markersize=10, label='Student A (Improving)')
+line_b, = plt.plot(tests, student_b, 's-', color='#9C27B0', 
+                   linewidth=2, markersize=8, label='Student B (Consistent)')
+line_avg, = plt.plot(tests, class_avg, '^-', color='#FF9800', 
+                     linewidth=4, markersize=12, label='Class Average')
+
+# Add value labels
+for i, (test, score_a, score_b, score_avg) in enumerate(zip(tests, student_a, student_b, class_avg)):
+    plt.text(i, score_a + 1, f'{score_a}', ha='center', va='bottom', 
+             fontsize=9, fontweight='bold', color='#4CAF50')
+    plt.text(i, score_b - 2, f'{score_b}', ha='center', va='top', 
+             fontsize=9, fontweight='bold', color='#9C27B0')
+    plt.text(i, score_avg + 1.5, f'{score_avg}', ha='center', va='bottom', 
+             fontsize=10, fontweight='bold', color='#FF9800')
+
+# Add trend lines and annotations
+plt.annotate('Steady Improvement', xy=(2, 75), xytext=(1, 85),
+             arrowprops=dict(arrowstyle='->', color='#4CAF50', linewidth=2),
+             fontsize=11, fontweight='bold', color='#4CAF50',
+             bbox=dict(facecolor='white', alpha=0.9))
+
+plt.annotate('Consistent Performance', xy=(2, 78), xytext=(3, 70),
+             arrowprops=dict(arrowstyle='->', color='#9C27B0', linewidth=2),
+             fontsize=11, fontweight='bold', color='#9C27B0',
+             bbox=dict(facecolor='white', alpha=0.9))
+
+plt.xlabel('Test Number', fontsize=12)
+plt.ylabel('Score', fontsize=12)
+plt.title('Enhanced Line Chart: Student Performance Trends', 
+          fontsize=14, fontweight='bold')
+plt.legend(loc='lower right', fontsize=11)
+plt.grid(True, alpha=0.3, linestyle='--')
+plt.ylim(60, 90)
+
+# Add overall trend
+plt.text(2.5, 62, 'Overall: Gradual improvement across tests', 
+         ha='center', fontsize=11, fontstyle='italic',
+         bbox=dict(facecolor='#E3F2FD', alpha=0.9))
+
+plt.tight_layout()
+plt.show()
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🥧 Pie Chart</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Circle divided into proportional slices showing parts of a whole.
+                </div>
+                
+                <div class="enhanced-visual">
+                    <h4>🥧 ENHANCED PIE CHART VISUALIZATION</h4>
+                    <div class="chart-container">
+                        <div style="text-align: center; margin-bottom: 15pt; font-weight: bold;">
+                            Student Performance Distribution
+                        </div>
+                        
+                        <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+                            <!-- Pie Chart Visualization -->
+                            <div style="position: relative; width: 180pt; height: 180pt; margin: 10pt;">
+                                <!-- Pie chart base -->
+                                <div style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(
+                                    #4CAF50 0% 15%,
+                                    #2196F3 15% 40%,
+                                    #FF9800 40% 65%,
+                                    #F44336 65% 85%,
+                                    #9C27B0 85% 100%
+                                ); box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                    
+                                    <!-- Percentage labels -->
+                                    <div style="position: absolute; left: 60%; top: 20%; transform: translate(-50%, -50%); 
+                                                background: white; padding: 3pt 6pt; border-radius: 3pt; font-size: 10pt; font-weight: bold;">
+                                        15%
+                                    </div>
+                                    <div style="position: absolute; left: 35%; top: 15%; transform: translate(-50%, -50%); 
+                                                background: white; padding: 3pt 6pt; border-radius: 3pt; font-size: 10pt; font-weight: bold;">
+                                        25%
+                                    </div>
+                                    <div style="position: absolute; left: 25%; top: 40%; transform: translate(-50%, -50%); 
+                                                background: white; padding: 3pt 6pt; border-radius: 3pt; font-size: 10pt; font-weight: bold;">
+                                        25%
+                                    </div>
+                                    <div style="position: absolute; left: 30%; top: 70%; transform: translate(-50%, -50%); 
+                                                background: white; padding: 3pt 6pt; border-radius: 3pt; font-size: 10pt; font-weight: bold;">
+                                        20%
+                                    </div>
+                                    <div style="position: absolute; left: 60%; top: 80%; transform: translate(-50%, -50%); 
+                                                background: white; padding: 3pt 6pt; border-radius: 3pt; font-size: 10pt; font-weight: bold;">
+                                        15%
+                                    </div>
+                                </div>
+                                
+                                <!-- Center circle -->
+                                <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+                                            width: 40pt; height: 40pt; border-radius: 50%; background: white;
+                                            display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    Total: 100%
+                                </div>
+                            </div>
+                            
+                            <!-- Legend -->
+                            <div style="margin-left: 20pt;">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #4CAF50;"></div>
+                                    <span>Excellent (90-100): 15%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #2196F3;"></div>
+                                    <span>Good (80-89): 25%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #FF9800;"></div>
+                                    <span>Average (70-79): 25%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #F44336;"></div>
+                                    <span>Below Average (60-69): 20%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #9C27B0;"></div>
+                                    <span>Needs Help (<60): 15%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Insights -->
+                        <div style="margin-top: 15pt; padding: 10pt; background: #E3F2FD; border-radius: 5pt;">
+                            <strong>Key Insights:</strong>
+                            <ul style="margin: 5pt 0 0 20pt; font-size: 10pt;">
+                                <li>50% of students scored 70 or above (Good + Excellent)</li>
+                                <li>25% of students need additional support</li>
+                                <li>Performance follows roughly normal distribution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-box">
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Performance categories
+categories = ['Excellent (90-100)', 'Good (80-89)', 'Average (70-79)', 
+              'Below Average (60-69)', 'Needs Help (<60)']
+students = [3, 5, 5, 4, 3]  # 20 students total
+colors = ['#4CAF50', '#2196F3', '#FF9800', '#F44336', '#9C27B0']
+explode = (0.05, 0.05, 0.05, 0.05, 0.05)  # Slight separation
+
+# Create enhanced pie chart
+plt.figure(figsize=(12, 10))
+
+# Create pie chart
+wedges, texts, autotexts = plt.pie(students, labels=categories, colors=colors,
+                                   autopct='%1.1f%%', startangle=90,
+                                   explode=explode, shadow=True,
+                                   textprops={'fontsize': 11})
+
+# Enhance wedge properties
+for wedge in wedges:
+    wedge.set_edgecolor('white')
+    wedge.set_linewidth(2)
+
+# Style percentage texts
+for autotext in autotexts:
+    autotext.set_color('white')
+    autotext.set_fontsize(10)
+    autotext.set_fontweight('bold')
+
+# Style category labels
+for text in texts:
+    text.set_fontsize(11)
+    text.set_fontweight('bold')
+
+# Add title
+plt.title('Enhanced Pie Chart: Student Performance Distribution\n(20 Students Total)', 
+          fontsize=14, fontweight='bold', pad=20)
+
+# Add center circle
+centre_circle = plt.Circle((0,0), 0.4, color='white', linewidth=2)
+plt.gca().add_artist(centre_circle)
+
+# Add center text
+plt.text(0, 0, 'Total\n100%', ha='center', va='center', 
+         fontsize=12, fontweight='bold', color='#333')
+
+# Add legend with counts
+legend_labels = [f'{cat}: {count} students' for cat, count in zip(categories, students)]
+plt.legend(wedges, legend_labels, title="Performance Details",
+           loc="center left", bbox_to_anchor=(1, 0.5),
+           fontsize=10)
+
+# Add insights box
+insight_text = "Key Insights:\n• 50% scored 70+\n• 25% need support\n• Normal distribution"
+plt.text(1.8, -0.8, insight_text, fontsize=10,
+         bbox=dict(facecolor='#E3F2FD', alpha=0.9, boxstyle='round,pad=0.5'))
+
+plt.axis('equal')  # Equal aspect ratio ensures pie is drawn as circle
+plt.tight_layout()
+plt.show()
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Bar Chart</h3>
+                
+                <div class="definition-box">
+                    <strong>Definition:</strong> Rectangular bars showing categorical data values.
+                </div>
+                
+                <div class="enhanced-visual">
+                    <h4>📊 ENHANCED BAR CHART VISUALIZATION</h4>
+                    <div class="chart-container">
+                        <div style="text-align: center; margin-bottom: 15pt; font-weight: bold;">
+                            Student Grades Distribution by Subject
+                        </div>
+                        
+                        <div style="display: flex; height: 200pt; align-items: flex-end; padding: 0 20pt;">
+                            <!-- Math bars -->
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; margin: 0 5pt;">
+                                <div style="height: 80%; background: linear-gradient(to top, #4CAF50, #81C784); 
+                                            width: 80%; border-radius: 5pt 5pt 0 0; position: relative;">
+                                    <div style="position: absolute; top: -25pt; left: 0; right: 0; text-align: center; 
+                                                font-weight: bold; font-size: 10pt;">8</div>
+                                </div>
+                                <div style="margin-top: 5pt; font-weight: bold;">Math</div>
+                            </div>
+                            
+                            <!-- Science bars -->
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; margin: 0 5pt;">
+                                <div style="height: 60%; background: linear-gradient(to top, #2196F3, #64B5F6); 
+                                            width: 80%; border-radius: 5pt 5pt 0 0; position: relative;">
+                                    <div style="position: absolute; top: -25pt; left: 0; right: 0; text-align: center; 
+                                                font-weight: bold; font-size: 10pt;">6</div>
+                                </div>
+                                <div style="margin-top: 5pt; font-weight: bold;">Science</div>
+                            </div>
+                            
+                            <!-- English bars -->
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; margin: 0 5pt;">
+                                <div style="height: 90%; background: linear-gradient(to top, #FF9800, #FFB74D); 
+                                            width: 80%; border-radius: 5pt 5pt 0 0; position: relative;">
+                                    <div style="position: absolute; top: -25pt; left: 0; right: 0; text-align: center; 
+                                                font-weight: bold; font-size: 10pt;">9</div>
+                                </div>
+                                <div style="margin-top: 5pt; font-weight: bold;">English</div>
+                            </div>
+                            
+                            <!-- History bars -->
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; margin: 0 5pt;">
+                                <div style="height: 40%; background: linear-gradient(to top, #9C27B0, #BA68C8); 
+                                            width: 80%; border-radius: 5pt 5pt 0 0; position: relative;">
+                                    <div style="position: absolute; top: -25pt; left: 0; right: 0; text-align: center; 
+                                                font-weight: bold; font-size: 10pt;">4</div>
+                                </div>
+                                <div style="margin-top: 5pt; font-weight: bold;">History</div>
+                            </div>
+                            
+                            <!-- Computer bars -->
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; margin: 0 5pt;">
+                                <div style="height: 70%; background: linear-gradient(to top, #F44336, #E57373); 
+                                            width: 80%; border-radius: 5pt 5pt 0 0; position: relative;">
+                                    <div style="position: absolute; top: -25pt; left: 0; right: 0; text-align: center; 
+                                                font-weight: bold; font-size: 10pt;">7</div>
+                                </div>
+                                <div style="margin-top: 5pt; font-weight: bold;">Computer</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Y-axis -->
+                        <div style="position: absolute; left: 20pt; top: 50pt; bottom: 40pt; width: 2px; background: #333;"></div>
+                        <div style="position: absolute; left: 0; width: 20pt; text-align: right; padding-right: 5pt;">
+                            <div style="height: 40pt;">10</div>
+                            <div style="height: 40pt;">8</div>
+                            <div style="height: 40pt;">6</div>
+                            <div style="height: 40pt;">4</div>
+                            <div style="height: 40pt;">2</div>
+                            <div style="height: 40pt;">0</div>
+                        </div>
+                        
+                        <!-- Insights -->
+                        <div style="margin-top: 20pt; padding: 10pt; background: #FFF3E0; border-radius: 5pt;">
+                            <strong>Analysis:</strong>
+                            <ul style="margin: 5pt 0 0 20pt; font-size: 10pt;">
+                                <li><strong>Highest:</strong> English (9 students with Grade A)</li>
+                                <li><strong>Lowest:</strong> History (4 students with Grade A)</li>
+                                <li><strong>Average:</strong> 6.8 students per subject with Grade A</li>
+                                <li>English and Math are strongest subjects</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-box">
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Subjects and number of students with Grade A
+subjects = ['Math', 'Science', 'English', 'History', 'Computer Science']
+grade_a_counts = [8, 6, 9, 4, 7]
+colors = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
+
+# Create enhanced bar chart
+plt.figure(figsize=(12, 8))
+
+# Create bars with gradient effect
+bars = plt.bar(subjects, grade_a_counts, color=colors, edgecolor='black', 
+               linewidth=2, alpha=0.9)
+
+# Add gradient effect to bars
+for bar, color in zip(bars, colors):
+    # Create gradient effect
+    gradient = np.linspace(0.8, 1.0, 100).reshape(1, -1)
+    gradient = np.vstack((gradient, gradient))
+    
+    # Get bar position
+    x = bar.get_x()
+    width = bar.get_width()
+    height = bar.get_height()
+    
+    # Create gradient rectangle
+    plt.imshow(gradient, extent=[x, x+width, 0, height], 
+               aspect='auto', cmap=plt.cm.Blues_r if 'blue' in color else 
+               plt.cm.Greens_r if 'green' in color else 
+               plt.cm.Oranges_r if 'orange' in color else 
+               plt.cm.Purples_r if 'purple' in color else 
+               plt.cm.Reds_r, alpha=0.6)
+
+# Add value labels on top of bars
+for i, (bar, count) in enumerate(zip(bars, grade_a_counts)):
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height + 0.2,
+             f'{count}', ha='center', va='bottom', fontsize=12, fontweight='bold')
+    
+    # Add percentage label inside bar
+    percentage = (count / sum(grade_a_counts)) * 100
+    plt.text(bar.get_x() + bar.get_width()/2., height/2,
+             f'{percentage:.1f}%', ha='center', va='center', 
+             color='white', fontsize=10, fontweight='bold')
+
+# Add average line
+average = np.mean(grade_a_counts)
+plt.axhline(y=average, color='red', linestyle='--', linewidth=2, 
+            label=f'Average = {average:.1f}')
+
+plt.xlabel('Subjects', fontsize=12)
+plt.ylabel('Number of Students with Grade A', fontsize=12)
+plt.title('Enhanced Bar Chart: Grade A Distribution Across Subjects', 
+          fontsize=14, fontweight='bold')
+plt.legend()
+plt.grid(True, alpha=0.3, axis='y')
+
+# Add insights annotation
+insights = f"""Analysis:
+• Highest: English (9 students)
+• Lowest: History (4 students)
+• Average: {average:.1f} students/subject
+• Total: {sum(grade_a_counts)} students with Grade A"""
+
+plt.text(0.02, 0.98, insights, transform=plt.gca().transAxes,
+         fontsize=10, verticalalignment='top',
+         bbox=dict(boxstyle='round', facecolor='#FFF3E0', alpha=0.9))
+
+plt.tight_layout()
+plt.show()
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section-title">
+            <h2>📋 Summary & Key Takeaways</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <table class="comparison-table">
+                    <tr>
+                        <th>Measure</th>
+                        <th>When to Use</th>
+                        <th>Example</th>
+                        <th>Python Function</th>
+                    </tr>
+                    <tr>
+                        <td>Mean</td>
+                        <td>No outliers, normal data</td>
+                        <td>Average temperature</td>
+                        <td>np.mean()</td>
+                    </tr>
+                    <tr>
+                        <td>Median</td>
+                        <td>With outliers, skewed data</td>
+                        <td>House prices, salaries</td>
+                        <td>np.median()</td>
+                    </tr>
+                    <tr>
+                        <td>Mode</td>
+                        <td>Categorical data, most common</td>
+                        <td>Favorite color, size</td>
+                        <td>statistics.mode()</td>
+                    </tr>
+                    <tr>
+                        <td>Range</td>
+                        <td>Quick spread measure</td>
+                        <td>Temperature variation</td>
+                        <td>max()-min()</td>
+                    </tr>
+                    <tr>
+                        <td>Variance</td>
+                        <td>Statistical calculations</td>
+                        <td>Quality control</td>
+                        <td>np.var()</td>
+                    </tr>
+                    <tr>
+                        <td>Standard Deviation</td>
+                        <td>Interpret spread in units</td>
+                        <td>Test score spread</td>
+                        <td>np.std()</td>
+                    </tr>
+                    <tr>
+                        <td>IQR</td>
+                        <td>With outliers, typical range</td>
+                        <td>Salary typical range</td>
+                        <td>np.percentile()</td>
+                    </tr>
+                </table>
+                
+                <div class="decision-box">
+                    <h3>🎯 Quick Decision Guide:</h3>
+                    <ol>
+                        <li><strong>Start with visualization</strong> - Histogram or box plot first</li>
+                        <li><strong>Check for outliers</strong> - Use IQR method</li>
+                        <li><strong>Choose central tendency</strong>: Mean for symmetric, Median for skewed</li>
+                        <li><strong>Report with dispersion</strong>: "Mean = 70, SD = 10" not just "Mean = 70"</li>
+                        <li><strong>Visualize to communicate</strong>: A good chart beats 1000 numbers</li>
+                    </ol>
+                </div>
+                
+                <div class="visualization-box">
+                    <h4>📊 The Complete Picture</h4>
+                    <div class="simple-visual">
+                        DESCRIPTIVE STATISTICS
+                        <br>┌─────────────────────────────────────┐
+                        <br>│ 1. Central Tendency                 │
+                        <br>│    • Mean (center)                  │
+                        <br>│    • Median (middle)                │
+                        <br>│    • Mode (most frequent)           │
+                        <br>│                                     │
+                        <br>│ 2. Dispersion (Spread)              │
+                        <br>│    • Range (total spread)           │
+                        <br>│    • Variance (average squares)     │
+                        <br>│    • Standard Deviation (√variance) │
+                        <br>│    • IQR (middle 50%)               │
+                        <br>│                                     │
+                        <br>│ 3. Shape                            │
+                        <br>│    • Skewness (asymmetry)           │
+                        <br>│    • Kurtosis (peakedness)          │
+                        <br>│                                     │
+                        <br>│ 4. Visualization                    │
+                        <br>│    • Histogram (distribution)       │
+                        <br>│    • Box plot (quartiles)           │
+                        <br>│    • Bar chart (categories)         │
+                        <br>│    • Pie chart (proportions)        │
+                        <br>│    • Line chart (trends)            │
+                        <br>└─────────────────────────────────────┘
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Section 3 of Statistics for Data Science - Descriptive Statistics</p>
+            <p>Complete Guide to Understanding Your Data</p>
+            <div class="footer-watermark">Data Science with Vamsi</div>
+            <p style="margin-top: 10pt;">&copy; 2025 Data Science Education Guide</p>
+            <p style="margin-top: 5pt; font-size: 10pt;">Next: Section 4 - Inferential Statistics</p>
+        </footer>
+    </div>
+</body>
+</html>

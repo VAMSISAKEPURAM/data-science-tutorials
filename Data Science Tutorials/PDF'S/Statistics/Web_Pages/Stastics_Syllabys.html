@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Statistics Syllabus for Data Science</title>
+    <style>
+        /* PDF-OPTIMIZED STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+            color: #000000;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.5;
+            position: relative;
+            min-height: 100vh;
+            font-size: 12pt;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* PDF FRIENDLY FONTS */
+        h1, h2, h3, h4 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-weight: bold;
+            color: #000000;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* SIMPLE WATERMARKS FOR PDF */
+        .watermark {
+            position: fixed;
+            opacity: 0.1;
+            font-size: 80pt;
+            font-weight: bold;
+            color: #cccccc;
+            z-index: -9999;
+            pointer-events: none;
+            font-family: 'Georgia', serif;
+        }
+
+        .watermark-center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        /* PDF CONTAINER */
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+            background: #ffffff;
+        }
+
+        /* HEADER - SIMPLE FOR PDF */
+        .header {
+            background-color: #f0f0f0;
+            border: 2px solid #000000;
+            padding: 30pt;
+            text-align: center;
+            margin-bottom: 30pt;
+            page-break-before: always;
+            page-break-inside: avoid;
+        }
+
+        .header h1 {
+            font-size: 24pt;
+            margin-bottom: 10pt;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        .header p {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        /* SIMPLE GRID FOR PDF */
+        .content-section {
+            margin-bottom: 40pt;
+            page-break-inside: avoid;
+        }
+
+        /* CARDS - SIMPLE BORDERS FOR PDF */
+        .card {
+            background: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 5pt;
+            padding: 20pt;
+            margin-bottom: 20pt;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .card h2 {
+            font-size: 18pt;
+            margin-bottom: 15pt;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5pt;
+        }
+
+        .card h3 {
+            font-size: 14pt;
+            margin: 15pt 0 8pt 0;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        /* LISTS - SIMPLE FOR PDF */
+        ul, ol {
+            margin-left: 40pt;
+            margin-bottom: 15pt;
+        }
+
+        li {
+            margin-bottom: 6pt;
+            padding-left: 5pt;
+            line-height: 1.4;
+        }
+
+        /* DEFINITION BOXES - HIGH CONTRAST FOR PDF */
+        .definition-box {
+            background: #f8f8f8;
+            border-left: 4pt solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            border: 1px solid #cccccc;
+        }
+
+        /* SECTION TITLES */
+        .section-title {
+            background-color: #000000;
+            color: #ffffff !important;
+            padding: 15pt;
+            margin: 30pt 0 20pt 0;
+            text-align: center;
+            font-size: 20pt;
+            font-weight: bold;
+            page-break-before: always;
+        }
+
+        .section-title h2 {
+            color: #ffffff !important;
+            border: none;
+        }
+
+        /* TOPIC BOXES */
+        .topic-box {
+            background: #ffffff;
+            border: 1px solid #666666;
+            border-left: 4pt solid #000000;
+            border-radius: 3pt;
+            padding: 12pt;
+            margin: 12pt 0;
+            break-inside: avoid;
+        }
+
+        .sub-topic {
+            margin-left: 20pt;
+            margin-top: 8pt;
+            margin-bottom: 8pt;
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: #000000;
+            color: #ffffff !important;
+            text-align: center;
+            padding: 20pt;
+            margin-top: 40pt;
+            border: 2px solid #000000;
+            page-break-before: avoid;
+        }
+
+        .footer p, .footer div {
+            color: #ffffff !important;
+        }
+
+        .footer-watermark {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-top: 10pt;
+        }
+
+        /* PAGE BREAKS FOR PDF */
+        .page-break {
+            page-break-before: always;
+        }
+
+        .no-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* PRINT SPECIFIC STYLES */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: #ffffff;
+            }
+            
+            .container {
+                padding: 0.25in;
+                max-width: 100%;
+            }
+            
+            .watermark {
+                opacity: 0.05;
+            }
+            
+            .card {
+                border: 1px solid #000000;
+                box-shadow: none;
+            }
+            
+            /* Force background colors in print */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+
+        /* RESPONSIVE - SIMPLE */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 20pt;
+            }
+            
+            .header h1 {
+                font-size: 20pt;
+            }
+            
+            .card {
+                padding: 15pt;
+            }
+        }
+
+        /* BOLD TEXT FOR EMPHASIS */
+        strong {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        /* HORIZONTAL RULES */
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #000000;
+            margin: 20pt 0;
+        }
+
+        /* SYLLABUS STRUCTURE */
+        .syllabus-item {
+            margin-bottom: 8pt;
+            padding-left: 10pt;
+        }
+
+        .main-topic {
+            font-weight: bold;
+            font-size: 14pt;
+            margin-top: 15pt;
+            margin-bottom: 8pt;
+        }
+
+        .sub-topic-list {
+            margin-left: 30pt;
+        }
+    </style>
+</head>
+<body>
+    <!-- Simple Watermarks for PDF -->
+    <div class="watermark watermark-center">Data Science with Vamsi</div>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>📊 COMPLETE STATISTICS SYLLABUS FOR DATA SCIENCE</h1>
+            <p>A Structured Learning Path for Aspiring Data Scientists</p>
+        </header>
+
+        <!-- Introduction Section -->
+        <div class="content-section no-break">
+            <div class="card">
+                <h2>🎯 Course Overview</h2>
+                <div class="definition-box">
+                    <strong>Complete Statistics Syllabus:</strong> This document outlines the comprehensive 15-section statistics curriculum designed specifically for data science aspirants. Each section builds upon previous knowledge to create a strong statistical foundation.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Types of Data -->
+        <div class="section-title">
+            <h2>1. Types of Data</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <h3>Qualitative (Categorical)</h3>
+                    <div class="sub-topic">Nominal</div>
+                    <div class="sub-topic">Ordinal</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Quantitative (Numerical)</h3>
+                    <div class="sub-topic">Discrete</div>
+                    <div class="sub-topic">Continuous</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Types of Statistics -->
+        <div class="section-title">
+            <h2>2. Types of Statistics</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Descriptive Statistics</div>
+                    <div class="main-topic">Inferential Statistics</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Descriptive Statistics -->
+        <div class="section-title">
+            <h2>3. Descriptive Statistics</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <h3>Measures of Central Tendency</h3>
+                    <div class="sub-topic">Mean</div>
+                    <div class="sub-topic">Median</div>
+                    <div class="sub-topic">Mode</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Measures of Dispersion</h3>
+                    <div class="sub-topic">Range</div>
+                    <div class="sub-topic">Variance</div>
+                    <div class="sub-topic">Standard Deviation</div>
+                    <div class="sub-topic">Interquartile Range (IQR)</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Measures of Shape</h3>
+                    <div class="sub-topic">Skewness</div>
+                    <div class="sub-topic">Kurtosis</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Percentiles and Quartiles</h3>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Frequency Distribution</h3>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Data Visualization Concepts</h3>
+                    <div class="sub-topic">Histogram</div>
+                    <div class="sub-topic">Box Plot</div>
+                    <div class="sub-topic">Bar Chart</div>
+                    <div class="sub-topic">Pie Chart</div>
+                    <div class="sub-topic">Line Chart</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Inferential Statistics -->
+        <div class="section-title">
+            <h2>4. Inferential Statistics</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Population vs Sample</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Sampling Techniques</h3>
+                    <div class="sub-topic">Random Sampling</div>
+                    <div class="sub-topic">Stratified Sampling</div>
+                    <div class="sub-topic">Systematic Sampling</div>
+                    <div class="sub-topic">Cluster Sampling</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Sampling Distribution</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Central Limit Theorem</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Probability Theory -->
+        <div class="section-title">
+            <h2>5. Probability Theory</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Basic Probability Concepts</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Types of Probability</h3>
+                    <div class="sub-topic">Classical Probability</div>
+                    <div class="sub-topic">Empirical Probability</div>
+                    <div class="sub-topic">Subjective Probability</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Rules of Probability</h3>
+                    <div class="sub-topic">Addition Rule</div>
+                    <div class="sub-topic">Multiplication Rule</div>
+                    <div class="sub-topic">Conditional Probability</div>
+                    <div class="sub-topic">Bayes' Theorem</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Random Variables -->
+        <div class="section-title">
+            <h2>6. Random Variables</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Discrete Random Variables</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Continuous Random Variables</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Probability Mass Function (PMF)</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Probability Density Function (PDF)</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Cumulative Distribution Function (CDF)</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Expected Value</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Variance of Random Variables</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Probability Distributions -->
+        <div class="section-title">
+            <h2>7. Probability Distributions</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <h3>Discrete Distributions</h3>
+                    <div class="sub-topic">Bernoulli Distribution</div>
+                    <div class="sub-topic">Binomial Distribution</div>
+                    <div class="sub-topic">Poisson Distribution</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Continuous Distributions</h3>
+                    <div class="sub-topic">Uniform Distribution</div>
+                    <div class="sub-topic">Normal (Gaussian) Distribution</div>
+                    <div class="sub-topic">Exponential Distribution</div>
+                    <div class="sub-topic">Log-Normal Distribution</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: Hypothesis Testing -->
+        <div class="section-title">
+            <h2>8. Hypothesis Testing</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Null Hypothesis</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Alternative Hypothesis</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Type I Error</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Type II Error</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Significance Level (α)</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">p-value</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Test Statistic</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Critical Value</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 9: Statistical Tests -->
+        <div class="section-title">
+            <h2>9. Statistical Tests</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Z-test</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>t-test</h3>
+                    <div class="sub-topic">One-sample t-test</div>
+                    <div class="sub-topic">Two-sample t-test</div>
+                    <div class="sub-topic">Paired t-test</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Chi-Square Test</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">ANOVA</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Non-Parametric Tests</h3>
+                    <div class="sub-topic">Mann-Whitney U Test</div>
+                    <div class="sub-topic">Wilcoxon Signed-Rank Test</div>
+                    <div class="sub-topic">Kruskal-Wallis Test</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 10: Confidence Intervals -->
+        <div class="section-title">
+            <h2>10. Confidence Intervals</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Confidence Level</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Margin of Error</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Interval Estimation for Mean</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Interval Estimation for Proportion</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 11: Correlation and Covariance -->
+        <div class="section-title">
+            <h2>11. Correlation and Covariance</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Covariance</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Correlation Coefficient</h3>
+                    <div class="sub-topic">Pearson Correlation</div>
+                    <div class="sub-topic">Spearman Rank Correlation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 12: Regression Analysis -->
+        <div class="section-title">
+            <h2>12. Regression Analysis</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Simple Linear Regression</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Multiple Linear Regression</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Assumptions of Regression</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Coefficient Interpretation</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">R-squared</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Adjusted R-squared</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Residual Analysis</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 13: Statistical Assumptions -->
+        <div class="section-title">
+            <h2>13. Statistical Assumptions</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Normality</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Linearity</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Independence</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Homoscedasticity</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Multicollinearity</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 14: Exploratory Data Analysis (EDA) -->
+        <div class="section-title">
+            <h2>14. Exploratory Data Analysis (EDA)</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <h3>Data Cleaning Concepts</h3>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Missing Value Handling</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Outlier Detection</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Data Transformation</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Data Scaling</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Feature Distribution Analysis</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 15: Advanced Statistical Concepts -->
+        <div class="section-title">
+            <h2>15. Advanced Statistical Concepts (Data Science Focused)</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="topic-box">
+                    <div class="main-topic">Law of Large Numbers</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Bias and Variance</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Overfitting and Underfitting</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Bootstrap Sampling</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">Cross-Validation</div>
+                </div>
+
+                <div class="topic-box">
+                    <div class="main-topic">A/B Testing</div>
+                </div>
+
+                <div class="topic-box">
+                    <h3>Time Series Components</h3>
+                    <div class="sub-topic">Trend</div>
+                    <div class="sub-topic">Seasonality</div>
+                    <div class="sub-topic">Noise</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Complete Statistics Syllabus for Data Science</p>
+            <p>15 Comprehensive Sections - Structured Learning Path</p>
+            <div class="footer-watermark">Data Science with Vamsi</div>
+            <p style="margin-top: 10pt;">&copy; 2025 Data Science Education Guide</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics for Data Science - Section 2: Types of Statistics</title>
+    <style>
+        /* PDF-OPTIMIZED STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+            color: #000000;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.5;
+            position: relative;
+            min-height: 100vh;
+            font-size: 12pt;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* PDF FRIENDLY FONTS */
+        h1, h2, h3, h4 {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-weight: bold;
+            color: #000000;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* SIMPLE WATERMARKS FOR PDF */
+        .watermark {
+            position: fixed;
+            opacity: 0.1;
+            font-size: 80pt;
+            font-weight: bold;
+            color: #cccccc;
+            z-index: -9999;
+            pointer-events: none;
+            font-family: 'Georgia', serif;
+        }
+
+        .watermark-center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        /* PDF CONTAINER */
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+            background: #ffffff;
+        }
+
+        /* HEADER - SIMPLE FOR PDF */
+        .header {
+            background-color: #f0f0f0;
+            border: 2px solid #000000;
+            padding: 30pt;
+            text-align: center;
+            margin-bottom: 30pt;
+            page-break-before: always;
+            page-break-inside: avoid;
+        }
+
+        .header h1 {
+            font-size: 24pt;
+            margin-bottom: 10pt;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        .header p {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        /* SIMPLE GRID FOR PDF */
+        .content-section {
+            margin-bottom: 40pt;
+            page-break-inside: avoid;
+        }
+
+        /* CARDS - SIMPLE BORDERS FOR PDF */
+        .card {
+            background: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 5pt;
+            padding: 20pt;
+            margin-bottom: 20pt;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .card h2 {
+            font-size: 18pt;
+            margin-bottom: 15pt;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5pt;
+        }
+
+        .card h3 {
+            font-size: 14pt;
+            margin: 15pt 0 8pt 0;
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        /* LISTS - SIMPLE FOR PDF */
+        ul, ol {
+            margin-left: 40pt;
+            margin-bottom: 15pt;
+        }
+
+        li {
+            margin-bottom: 6pt;
+            padding-left: 5pt;
+            line-height: 1.4;
+        }
+
+        /* DEFINITION BOXES - HIGH CONTRAST FOR PDF */
+        .definition-box {
+            background: #f8f8f8;
+            border-left: 4pt solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            border: 1px solid #cccccc;
+        }
+
+        /* EXAMPLE BOXES */
+        .example-box {
+            background: #ffffff;
+            border: 1px solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            font-style: italic;
+            background-color: #f9f9f9;
+        }
+
+        /* DECISION BOXES */
+        .decision-box {
+            background: #f0f0f0;
+            border: 2px solid #000000;
+            border-left: 6pt solid #000000;
+            padding: 12pt;
+            margin: 12pt 0;
+            font-weight: bold;
+        }
+
+        /* COMPARISON BOX */
+        .comparison-box {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 15pt;
+            margin: 15pt 0;
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: #000000;
+            color: #ffffff !important;
+            text-align: center;
+            padding: 20pt;
+            margin-top: 40pt;
+            border: 2px solid #000000;
+            page-break-before: avoid;
+        }
+
+        .footer p, .footer div {
+            color: #ffffff !important;
+        }
+
+        .footer-watermark {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-top: 10pt;
+        }
+
+        /* PAGE BREAKS FOR PDF */
+        .page-break {
+            page-break-before: always;
+        }
+
+        .no-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* PRINT SPECIFIC STYLES */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: #ffffff;
+            }
+            
+            .container {
+                padding: 0.25in;
+                max-width: 100%;
+            }
+            
+            .watermark {
+                opacity: 0.05;
+            }
+            
+            .card {
+                border: 1px solid #000000;
+                box-shadow: none;
+            }
+            
+            /* Force background colors in print */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+
+        /* RESPONSIVE - SIMPLE */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 20pt;
+            }
+            
+            .header h1 {
+                font-size: 20pt;
+            }
+            
+            .card {
+                padding: 15pt;
+            }
+        }
+
+        /* SECTION TITLES */
+        .section-title {
+            background-color: #000000;
+            color: #ffffff !important;
+            padding: 15pt;
+            margin: 30pt 0 20pt 0;
+            text-align: center;
+            font-size: 20pt;
+            font-weight: bold;
+            page-break-before: always;
+        }
+
+        .section-title h2 {
+            color: #ffffff !important;
+            border: none;
+        }
+
+        /* BOLD TEXT FOR EMPHASIS */
+        strong {
+            font-weight: bold;
+            color: #000000;
+        }
+
+        /* HORIZONTAL RULES */
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #000000;
+            margin: 20pt 0;
+        }
+
+        /* REAL WORLD EXAMPLES */
+        .real-world-example {
+            background: #fff8e1;
+            border-left: 4pt solid #ffb300;
+            padding: 10pt;
+            margin: 10pt 0;
+            font-size: 11pt;
+        }
+    </style>
+</head>
+<body>
+    <!-- Simple Watermarks for PDF -->
+    <div class="watermark watermark-center">Data Science with Vamsi</div>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>📊 STATISTICS FOR DATA SCIENCE</h1>
+            <p>Section 2: Types of Statistics - Descriptive vs Inferential</p>
+        </header>
+
+        <!-- Introduction Section -->
+        <div class="content-section no-break">
+            <div class="card">
+                <h2>🎯 Two Main Branches of Statistics</h2>
+                
+                <div class="definition-box">
+                    <strong>Statistics is divided into two main branches:</strong> Each answers different questions about data and serves different purposes in data analysis.
+                </div>
+                
+                <div class="comparison-box">
+                    <h3>📈 Descriptive Statistics</h3>
+                    <p><strong>Answers:</strong> "What does this data look like?"</p>
+                    
+                    <h3>📊 Inferential Statistics</h3>
+                    <p><strong>Answers:</strong> "Can I trust this finding? Can I apply it to a larger group?"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Descriptive Statistics -->
+        <div class="section-title">
+            <h2>📈 Descriptive Statistics</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="definition-box">
+                    <strong>Definition:</strong> Descriptive statistics summarize and describe the main features of a dataset using numbers and visualizations. It answers: "What does this data look like?"
+                </div>
+                
+                <h3>Why is this important & what is the use?</h3>
+                <p>Before making predictions or conclusions, you need to understand your data first. Descriptive statistics gives you this understanding quickly.</p>
+                
+                <div class="real-world-example">
+                    <strong>Beginner Example:</strong> Imagine you have exam scores of 100 students. Descriptive statistics helps you answer:
+                    <ul>
+                        <li>What's the average score? (Mean)</li>
+                        <li>What score did most students get? (Mode)</li>
+                        <li>What's the highest and lowest score? (Range)</li>
+                        <li>How spread out are the scores? (Standard Deviation)</li>
+                    </ul>
+                </div>
+
+                <h3>What it tells about data:</h3>
+                <ul>
+                    <li>What's the typical value? (central tendency)</li>
+                    <li>How spread out are the values? (dispersion)</li>
+                    <li>Is the data symmetric or skewed?</li>
+                    <li>Where do most values fall?</li>
+                </ul>
+
+                <div class="example-box">
+                    <strong>Practical Example:</strong> You're analyzing monthly sales data:
+                    <ul>
+                        <li><strong>Mean sales:</strong> $50,000 per month</li>
+                        <li><strong>Range:</strong> $30,000 - $70,000</li>
+                        <li><strong>Most frequent sales amount:</strong> $45,000 (Mode)</li>
+                        <li><strong>Middle value when sorted:</strong> $52,000 (Median)</li>
+                    </ul>
+                    This gives you a complete picture of your sales pattern without any predictions.
+                </div>
+
+                <div class="decision-box">
+                    <h3>How it helps in decision-making:</h3>
+                    <p>If a company wants to know their typical customer spending, descriptive statistics quickly shows the average, range, and typical pattern without needing advanced analysis.</p>
+                </div>
+
+                <div class="real-world-example">
+                    <strong>More Beginner Examples:</strong>
+                    <ul>
+                        <li><strong>Restaurant Owner:</strong> "What are my busiest hours?" (Descriptive statistics shows peak times)</li>
+                        <li><strong>Teacher:</strong> "How did my class perform on the test?" (Average, highest, lowest scores)</li>
+                        <li><strong>Social Media Manager:</strong> "What's the average engagement on my posts?" (Mean likes/comments)</li>
+                        <li><strong>Fitness Tracker:</strong> "What's my average daily steps?" (Simple descriptive stat)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Inferential Statistics -->
+        <div class="section-title">
+            <h2>📊 Inferential Statistics</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="definition-box">
+                    <strong>Definition:</strong> Inferential statistics uses sample data to make predictions or conclusions about an entire population. It answers: "Can I trust this finding? Can I apply it to a larger group?"
+                </div>
+                
+                <h3>Why is this important & what is the use?</h3>
+                <p>You can't always test every person (the entire population), so you test a smaller group (sample) and infer conclusions about the whole population.</p>
+                
+                <div class="real-world-example">
+                    <strong>Beginner Example:</strong> Imagine you want to know which phone brand is most popular in your city (population: 1 million people). You can't ask everyone, so you:
+                    <ul>
+                        <li>Survey 500 people (sample)</li>
+                        <li>Find 60% prefer Brand A</li>
+                        <li>Use inferential statistics to say: "We're 95% confident that 55-65% of ALL city residents prefer Brand A"</li>
+                    </ul>
+                </div>
+
+                <h3>What it tells about data:</h3>
+                <ul>
+                    <li>Is this finding real or just random luck?</li>
+                    <li>Does this pattern apply to the entire population?</li>
+                    <li>How confident can we be in our predictions?</li>
+                    <li>Is there a real difference between two groups?</li>
+                </ul>
+
+                <div class="example-box">
+                    <strong>Practical Example:</strong> A company tests a new website design:
+                    <ul>
+                        <li>Test with 1,000 visitors (sample)</li>
+                        <li>New design gets 15% more signups</li>
+                        <li>Inferential statistics says: "We're 95% confident the new design will increase signups by 10-20% for ALL visitors"</li>
+                    </ul>
+                </div>
+
+                <div class="decision-box">
+                    <h3>How it helps in decision-making:</h3>
+                    <p>A pharmaceutical company tests a drug on 1000 people and finds 80% improvement. Inferential statistics tells them: "We can be 95% confident that this drug will help 75-85% of the entire population."</p>
+                </div>
+
+                <div class="real-world-example">
+                    <strong>More Beginner Examples:</strong>
+                    <ul>
+                        <li><strong>Movie Rating:</strong> Based on 1000 reviews (sample), predict how ALL viewers will rate it</li>
+                        <li><strong>Election Poll:</strong> Survey 2000 voters to predict election results for millions</li>
+                        <li><strong>Quality Control:</strong> Test 100 products from a batch of 10,000 to ensure quality</li>
+                        <li><strong>Medical Study:</strong> Test new treatment on 500 patients to recommend for millions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="section-title">
+            <h2>📋 Descriptive vs Inferential: Key Differences</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="comparison-box">
+                    <h3>Descriptive Statistics</h3>
+                    <ul>
+                        <li><strong>Purpose:</strong> Describe what's in your data</li>
+                        <li><strong>Question:</strong> "What happened?"</li>
+                        <li><strong>Data Used:</strong> Entire dataset</li>
+                        <li><strong>Tools:</strong> Mean, median, mode, graphs</li>
+                        <li><strong>Output:</strong> Summary of existing data</li>
+                        <li><strong>Example:</strong> "Average salary is $65,000"</li>
+                        <li><strong>When to use:</strong> First step in any analysis</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-box">
+                    <h3>Inferential Statistics</h3>
+                    <ul>
+                        <li><strong>Purpose:</strong> Make predictions about larger groups</li>
+                        <li><strong>Question:</strong> "What will happen?"</li>
+                        <li><strong>Data Used:</strong> Sample from population</li>
+                        <li><strong>Tools:</strong> Hypothesis testing, confidence intervals</li>
+                        <li><strong>Output:</strong> Predictions with confidence levels</li>
+                        <li><strong>Example:</strong> "95% confident salary will be $60,000-$70,000"</li>
+                        <li><strong>When to use:</strong> When you can't measure everyone</li>
+                    </ul>
+                </div>
+
+                <div class="decision-box">
+                    <h3>Simple Analogy:</h3>
+                    <p><strong>Descriptive Statistics = Looking at a photo</strong> (You see exactly what's there)</p>
+                    <p><strong>Inferential Statistics = Looking through a keyhole</strong> (You see part and guess the whole room)</p>
+                </div>
+
+                <div class="real-world-example">
+                    <strong>Complete Example - Restaurant Business:</strong>
+                    <ul>
+                        <li><strong>Descriptive:</strong> "Last month, we served 5000 customers with average bill of $25. Busiest day was Saturday."</li>
+                        <li><strong>Inferential:</strong> "Based on last month's data, we predict next month will have 5200-5500 customers with 95% confidence."</li>
+                    </ul>
+                </div>
+
+                <h3>📝 Key Takeaways:</h3>
+                <ul>
+                    <li><strong>Always start with descriptive statistics</strong> to understand your data</li>
+                    <li><strong>Use inferential statistics</strong> when you need to make predictions</li>
+                    <li><strong>Descriptive = Facts about your data</strong></li>
+                    <li><strong>Inferential = Predictions about larger groups</strong></li>
+                    <li><strong>You need descriptive stats before doing inferential stats</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Python Example Section -->
+        <div class="section-title">
+            <h2>🐍 Python Examples</h2>
+        </div>
+
+        <div class="content-section no-break">
+            <div class="card">
+                <div class="example-box">
+                    <h3>Descriptive Statistics in Python:</h3>
+                    <pre style="background: #f0f0f0; padding: 10pt; border: 1px solid #ccc;">
+import pandas as pd
+import numpy as np
+
+# Sample data: Monthly sales (in thousands)
+sales = [45, 52, 48, 55, 50, 53, 47, 51, 49, 54, 46, 52]
+
+# Descriptive Statistics
+print("=== DESCRIPTIVE STATISTICS ===")
+print(f"Mean Sales: ${np.mean(sales):.1f}K")
+print(f"Median Sales: ${np.median(sales):.1f}K")
+print(f"Minimum Sales: ${np.min(sales)}K")
+print(f"Maximum Sales: ${np.max(sales)}K")
+print(f"Sales Range: ${np.max(sales)-np.min(sales)}K")
+print(f"Standard Deviation: ${np.std(sales):.1f}K")</pre>
+                </div>
+
+                <div class="example-box">
+                    <h3>Inferential Statistics in Python (Simple Example):</h3>
+                    <pre style="background: #f0f0f0; padding: 10pt; border: 1px solid #ccc;">
+from scipy import stats
+
+# Sample data: Test scores from two teaching methods
+method_A = [78, 82, 85, 79, 83, 80, 81]  # 7 students
+method_B = [75, 79, 77, 74, 78, 76, 80]  # 7 students
+
+# Inferential: t-test to see if there's a real difference
+t_stat, p_value = stats.ttest_ind(method_A, method_B)
+
+print("=== INFERENTIAL STATISTICS ===")
+print(f"T-statistic: {t_stat:.3f}")
+print(f"P-value: {p_value:.3f}")
+
+if p_value < 0.05:
+    print("Conclusion: There IS a significant difference between methods")
+else:
+    print("Conclusion: No significant difference found")</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Section 2 of Statistics for Data Science - Types of Statistics</p>
+            <p>Descriptive Statistics vs Inferential Statistics</p>
+            <div class="footer-watermark">Data Science with Vamsi</div>
+            <p style="margin-top: 10pt;">&copy; 2025 Data Science Education Guide</p>
+            <p style="margin-top: 5pt; font-size: 10pt;">Next: Section 3 - Descriptive Statistics Deep Dive</p>
+        </footer>
+    </div>
+</body>
+</html>
